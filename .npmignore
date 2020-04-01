@@ -106,3 +106,5 @@ dist
 
 goTest.js
 test.js
+
+.vscode/

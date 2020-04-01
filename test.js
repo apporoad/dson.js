@@ -220,3 +220,14 @@ DSON().get('data').count().mark('dataCount').each().where({
 
 DSON().get('data').count().mark('dataCount').all().where(DSON().find('job').all().where(DSON().get('long').where('>3').count().test('>0'))).mark('hello')
 DSON().get('data[]').where(DSON('job[]').where(DSON('long').where('>3').count().test('>0'))).mark('hello')
+
+DSON().get('data[].job[].long').sum()
+DSON().get('data[].job[].long').average().max().min().datediff().unique()//?
+DSON().get('data[].job[].name').trim().trimStart('start').trimEnd('end')
+    .toUpper().toLower().toUpperCase()
+    .toLowerCase().replace().substring().substr()
+    .order().format()
+    .select({
+        target : '',
+        newName : DSON('name')
+    })

@@ -94,3 +94,129 @@ dson.do(json).then(data=>{
     console.log(data.hello)
 })
 dson.doTest(json)
+
+
+
+var testJson = {
+	hello : 'good good day',
+	data : [
+		{
+			id : 1,
+			name : 'LiSA',
+			job :  [{
+				name : 'singer',
+				long : 11,
+				remark : 'main job'
+			},{
+				name : 'wife',
+				long : 0
+			}],
+			profile : {
+				height : 165,
+				weight : 48,
+				nice : 95
+			}
+		},{
+			id : 2,
+			name : 'luna',
+			job :  [{
+				name : 'singer',
+				long : 8,
+				remark : 'main job'
+			},{
+				name : 'model',
+				long : 5
+			}],
+			profile : {
+				height : 155,
+				weight : 45,
+				nice : 93
+			}
+		},{
+			id : 3,
+			name : 'eir',
+			job :  [{
+				name : 'singer',
+				long : 8,
+				remark : 'main job'
+			}],
+			profile : {
+				height : 160,
+				weight : 50,
+				nice : 99
+			}
+		},{
+			id : 1,
+			name : 'fade',
+			job :  [{
+				name : 'actor',
+				long : 3,
+				remark : 'main job'
+			},{
+				name : 'singer',
+				long : 1
+			}],
+			profile : {
+				height : 170,
+				weight : 65,
+				nice : 50
+			}
+		},{
+			id : 5,
+			name : 'zhoubichang',
+			job :  [{
+				name : 'singer',
+				long : 3,
+				remark : 'main job'
+			},{
+				name : 'wife',
+				long : 3
+			}],
+			profile : {
+				height : 162,
+				weight : 55,
+				nice : 34
+			}
+		},{
+			id : 6,
+			name : 'moti',
+			job :  [{
+				name : 'singer',
+				long : 3
+			},{
+				name : 'zhibo',
+				long : 3
+			}],
+			profile : {
+				height : 148,
+				weight : 43,
+				nice : 97
+			}
+		}
+	]
+}
+
+
+DSON().get('data').count().mark('dataCount').each()
+DSON().get('data').count().mark('dataCount').all()
+DSON().get('data').count().mark('dataCount').first()
+DSON().get('data').count().mark('dataCount').last()
+DSON().get('data').count().mark('dataCount').random()
+DSON().get('data').count().mark('dataCount').top()
+DSON().get('data').count().mark('dataCount').top(3)
+DSON().get('data').count().mark('dataCount').last(2).mark('last2')
+DSON().get('data').count().mark('dataCount').each().where({
+	profile: {
+		nice : '>60'
+	}
+}).test({
+			id : '?number&?nonRepeatable',
+			job :  DSON().count().test('>0'),
+			profile : {
+				height : JVD().isNumber().between(100,200),
+			}
+})
+
+
+DSON().get('data').count().mark('dataCount').all().where(DSON().find('job').all().where(DSON().get('long').where('>3').count().test('>0'))).mark('hello')
+DSON().get('data[]').where(DSON('job[]').where(DSON('long').where('>3').count().test('>0'))).mark('hello')

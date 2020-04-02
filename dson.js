@@ -33,6 +33,8 @@ function DSON() {
     this.do = this.run = this.go = (data) => {
   
     }
+    this.mark =()=>{}
+    this.test = ()=>{}
     this.doTest =()=>{
 
     }

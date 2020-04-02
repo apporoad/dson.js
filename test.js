@@ -79,7 +79,7 @@ var json = {
 var dson = DSON().find({
     key : 'asdf'
 }).test('?>10&<20').mark('hello')
-.findDown('hello').test('!=1000')
+.find('hello').test('!=1000')
 .root().find('node').test({
     hello : "?='world'",
     cheers :[

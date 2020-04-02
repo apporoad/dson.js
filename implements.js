@@ -1,8 +1,19 @@
 const utils = require('lisa.utils')
 const ljson = require('lisa.json')
 
-exports.get = (json,expression)=>{
-    return ljson(json).get(expression)
+exports.get = (context,expression)=>{
+    if(expression && context.currentData){
+        if(utils.Type.isObject(context.currentData) || utils.Type.isArray(context.currentData)){
+            context.currentData = context.tempData 
+                = ljson(context.currentData).get(expression)
+        }
+    }
+}
+
+exports.mark = (context, name)=>{
+    if(name){
+        context.marks[name] = context.tempData
+    }
 }
 
 exports.find =async (json,keyOrFilter,value)=>{

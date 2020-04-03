@@ -136,13 +136,13 @@ exports.unique= (context, equilsFn) =>{
 exports.trim = (context) =>{
     if(utils.Type.isString(context.currentData)){
         //todo
-        context.currentData = context.tempData = utils.trim(context.currentData)
+        context.currentData = context.tempData = context.currentData.trim()
     }
 }
-exports.trimStart = (context) =>{
+exports.trimStart = (context ,stringOrArray) =>{
     if(utils.Type.isString(context.currentData)){
         //todo
-        context.currentData = context.tempData = utils.trimStart()
+        context.currentData = context.tempData = utils.startTrim(context.currentData,stringOrArray)
     }
 }
 exports.trimEnd =1

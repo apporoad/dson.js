@@ -1,4 +1,5 @@
 const utils = require('lisa.utils')
+const uType = utils.Type
 const ljson = require('lisa.json')
 
 function randUnique(start, end, size){
@@ -135,24 +136,66 @@ exports.unique= (context, equilsFn) =>{
 }
 exports.trim = (context) =>{
     if(utils.Type.isString(context.currentData)){
-        //todo
         context.currentData = context.tempData = context.currentData.trim()
     }
 }
+exports.trimAll = (context) =>{
+    //todo
+}
 exports.trimStart = (context ,stringOrArray) =>{
     if(utils.Type.isString(context.currentData)){
-        //todo
         context.currentData = context.tempData = utils.startTrim(context.currentData,stringOrArray)
     }
 }
-exports.trimEnd =1
-exports.toUpper=1
-exports.toUpperCase=1
-exports.toLower=1
-exports.toLowerCase=1
-exports.replace =1
-exports.substr
-exports.substring
-exports.format
+exports.trimStartAll = (context,stringOrArray)=>{
+    //todo
+}
+exports.trimEnd = (context , stringOrArray)=>{
+    if(utils.Type.isString(context.currentData)){
+        context.currentData = context.tempData = utils.endTrim(context.currentData,stringOrArray)
+    }
+}
+exports.trimEndAll = (context,stringOrArray)=>{
+    //todo
+}
+exports.toUpperCase = exports.toUpper= (context)=>{
+    if(utils.Type.isString(context.currentData)){
+        context.currentData = context.tempData =  context.currentData.toUpperCase()
+    }
+}
+exports.toUpperCaseAll = exports.toUpperAll = (context) =>{
+    //todo
+}
+exports.toLowerCase = exports.toLower = (context) =>{
+    if(utils.Type.isString(context.currentData)){
+        context.currentData = context.tempData = context.currentData.toLowerCase()
+    }
+}
+exports.toLowerCaseAll = exports.toLowerAll = (context) =>{}
+
+exports.replace = (context , regex , replaceValue , equilsFn) =>{
+    if(utils.Type.isString(context.currentData) && (uType.isRegExp(regex) || uType.isString(regex))){
+        context.currentData = context.tempData =  context.currentData.replace(regex,replaceValue)
+    }
+    //todo
+}
+exports.replaceAll =()=>{
+    //todo
+}
+exports.substr = (context, from,length) =>{
+    if(uType.isString(context.currentData)){
+        context.currentData = context.tempData = context.currentData.substr(from,length)
+    }
+}
+exports.substring =  (context, start,end) =>{
+    if(uType.isString(context.currentData)){
+        context.currentData = context.tempData = context.currentData.substring(start,end)
+    }
+}
+exports.format = ()=>{
+    //todo 
+
+    // format json
+}
 exports.order
 exports.select

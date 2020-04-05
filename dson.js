@@ -30,11 +30,23 @@ function DSON() {
     }
     this.add = this.reg
 
-    this.do = this.run = this.go = (data) => {
-  
+    this.do = this.run = this.go = async (data) => {
+        var context = {
+            root: data,
+            currentData:  data,   //当前位置对应的数据
+            tempData: data,     //当前记录的数据
+            marks: {}
+        }
+        for(var index =0;index< _this._queue.length;index ++){
+            var current = _this._queue[index]
+            var params = [context].concat(current.params)
+            await Promise.resolve(_this._implements[current.item].apply(_this, params))
+        }
+
+        return context.marks
     }
-    this.test = ()=>{}
-    this.doTest =()=>{
+    this.test = () => { }
+    this.doTest = () => {
 
     }
 

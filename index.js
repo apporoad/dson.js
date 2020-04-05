@@ -2,10 +2,10 @@ const DSON = require('./dson')
 const impls = require('./implements')
 
 module.exports = (expression) => {
-    var j =new JVD()
+    var d=new DSON()
     for (key in impls) {
-        j.reg(key, impls[key])
+        d.reg(key, impls[key])
     }
     //traslator.translate(j,expression) 
-    return j
+    return d
 }

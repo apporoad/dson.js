@@ -58,6 +58,48 @@ var json = {
 	"message": null
 }
 
+it('test basic', async () =>{
+
+	// var masks = await DSON().get("data[0].mode").mark('oneMode').do(json)	
+	// expect(masks.oneMode).toBe('0514')
+
+	// var masks2 = await DSON().get('[0].mode').mark('twoMode').do(json.data)
+	// expect(masks2.twoMode).toBe('0514')
+
+	// var masks3  = await DSON().find('updateUser').mark('users').do(json)
+	// expect(masks3.users.length).toBe(3)
+
+	var masks4 = await DSON().get('data[0]').find('updateUser').mark('users').do(json)
+	expect(masks4.users.length).toBe(1)
+
+	var testRoot = await DSON().get('data[0]').root().find('updateUser').mark('users').do(json)
+	expect(testRoot.users.length).toBe(3)
+
+	var masks10  = await DSON().find('updateUser').count().mark('count')
+		.first().mark('first')
+		.root().get('data').last().mark('last')
+		.root().find('updateUser').last(2).mark('last2')
+		.root().find('updateUser').top(2).mark('top2')
+		.root().find('updateUser').random(2).mark('random2')
+		.root().find('data').first().distinct( (a,b) =>{ return a.updateUser == b.updateUser}).mark('distinct')
+		.root().find('changeTimes')
+		.sum().mark('sum1')
+		.average().mark('avg1')
+		.max().mark('max1')
+		.do(json)
+	
+	expect(masks10.count).toBe(3)
+	expect(masks10.first).toBe('apporoad')
+	expect(masks10.last.status).toBe('A1')
+	expect(masks10.last2[0]).toBe('LiSA')
+	expect(masks10.top2[0]).toBe('apporoad')
+	expect(masks10.random2.length).toBe(2)
+	expect(masks10.distinct.length).toBe(2)
+	expect()
+	
+})
+
+
 
 //找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA
 
@@ -76,24 +118,24 @@ var json = {
 		
 		
 
-var dson = DSON().find({
-    key : 'asdf'
-}).test('?>10&<20').mark('hello')
-.find('hello').test('!=1000')
-.root().find('node').test({
-    hello : "?='world'",
-    cheers :[
-        {
-            hello : JVD().required().isArray()
-        }
-    ]
-})
+// var dson = DSON().find({
+//     key : 'asdf'
+// }).test('?>10&<20').mark('hello')
+// .find('hello').test('!=1000')
+// .root().find('node').test({
+//     hello : "?='world'",
+//     cheers :[
+//         {
+//             hello : JVD().required().isArray()
+//         }
+//     ]
+// })
 
 
-dson.do(json).then(data=>{
-    console.log(data.hello)
-})
-dson.doTest(json)
+// dson.do(json).then(data=>{
+//     console.log(data.hello)
+// })
+// dson.doTest(json)
 
 
 
@@ -197,37 +239,37 @@ var testJson = {
 }
 
 
-DSON().get('data').count().mark('dataCount').each()
-DSON().get('data').count().mark('dataCount').all()
-DSON().get('data').count().mark('dataCount').first()
-DSON().get('data').count().mark('dataCount').last()
-DSON().get('data').count().mark('dataCount').random()
-DSON().get('data').count().mark('dataCount').top()
-DSON().get('data').count().mark('dataCount').top(3)
-DSON().get('data').count().mark('dataCount').last(2).mark('last2')
-DSON().get('data').count().mark('dataCount').each().where({
-	profile: {
-		nice : '>60'
-	}
-}).test({
-			id : '?number&?nonRepeatable',
-			job :  DSON().count().test('>0'),
-			profile : {
-				height : JVD().isNumber().between(100,200),
-			}
-})
+// DSON().get('data').count().mark('dataCount').each()
+// DSON().get('data').count().mark('dataCount').all()
+// DSON().get('data').count().mark('dataCount').first()
+// DSON().get('data').count().mark('dataCount').last()
+// DSON().get('data').count().mark('dataCount').random()
+// DSON().get('data').count().mark('dataCount').top()
+// DSON().get('data').count().mark('dataCount').top(3)
+// DSON().get('data').count().mark('dataCount').last(2).mark('last2')
+// DSON().get('data').count().mark('dataCount').each().where({
+// 	profile: {
+// 		nice : '>60'
+// 	}
+// }).test({
+// 			id : '?number&?nonRepeatable',
+// 			job :  DSON().count().test('>0'),
+// 			profile : {
+// 				height : JVD().isNumber().between(100,200),
+// 			}
+// })
 
 
-DSON().get('data').count().mark('dataCount').all().where(DSON().find('job').all().where(DSON().get('long').where('>3').count().test('>0'))).mark('hello')
-DSON().get('data[]').where(DSON('job[]').where(DSON('long').where('>3').count().test('>0'))).mark('hello')
+// DSON().get('data').count().mark('dataCount').all().where(DSON().find('job').all().where(DSON().get('long').where('>3').count().test('>0'))).mark('hello')
+// DSON().get('data[]').where(DSON('job[]').where(DSON('long').where('>3').count().test('>0'))).mark('hello')
 
-DSON().get('data[].job[].long').sum()
-DSON().get('data[].job[].long').average().max().min().dateDiff().unique()//?
-DSON().get('data[].job[].name').trim().trimStart('start').trimEnd('end')
-    .toUpper().toLower().toUpperCase()
-    .toLowerCase().replace().substring().substr()
-    .order().format()
-    .select({
-        target : '',
-        newName : DSON('name')
-    })
+// DSON().get('data[].job[].long').sum()
+// DSON().get('data[].job[].long').average().max().min().dateDiff().unique()//?
+// DSON().get('data[].job[].name').trim().trimStart('start').trimEnd('end')
+//     .toUpper().toLower().toUpperCase()
+//     .toLowerCase().replace().substring().substr()
+//     .order().format()
+//     .select({
+//         target : '',
+//         newName : DSON('name')
+//     })

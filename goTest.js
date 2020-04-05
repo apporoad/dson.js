@@ -9,3 +9,6 @@ return {
     toBe : ()=>{}
     }
 }
+
+
+require('./test')

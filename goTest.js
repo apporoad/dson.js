@@ -1,13 +1,14 @@
 
 
-it = (title , fn) =>{
-    if(fn)
-      fn()
+it = (title, fn) => {
+  if (fn)
+    fn()
+}
+expect = () => {
+  return {
+    toBe: () => { },
+    toBeTruthy: () => { }
   }
-expect = ()=>{
-return {
-    toBe : ()=>{}
-    }
 }
 
 

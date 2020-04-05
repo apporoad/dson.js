@@ -33,17 +33,28 @@ function DSON() {
     this.do = this.run = this.go = async (data) => {
         var context = {
             root: data,
-            currentData:  data,   //当前位置对应的数据
+            currentData: data,   //当前位置对应的数据
             tempData: data,     //当前记录的数据
-            marks: {}
+            marks: {},
+            autoMarks: {},
+            history: []
         }
-        for(var index =0;index< _this._queue.length;index ++){
+        for (var index = 0; index < _this._queue.length; index++) {
             var current = _this._queue[index]
             var params = [context].concat(current.params)
             await Promise.resolve(_this._implements[current.item].apply(_this, params))
+            if (current.item != 'mark') {
+                //auto mark
+                context.autoMarks[current.item] = context.tempData
+                //history
+                context.history.push({
+                    key: current.item,
+                    value: context.tempData
+                })
+            }
         }
 
-        return context.marks
+        return context
     }
     this.test = () => { }
     this.doTest = () => {

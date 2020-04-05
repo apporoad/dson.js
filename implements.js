@@ -138,11 +138,22 @@ exports.min = async (context, compareFn) => {
     }
 }
 exports.unique = (context, equilsFn) => {
+    if(uType.isArray(context.currentData)){
+        //todo
+        var uArr = []
+        for(var i =0 ;i < context.currentData.length;i++){
+            var ele = context.currentData[i]
+            if(utils.ArrayFilter(context.currentData,ele,equilsFn).length ==1){
+                uArr.push(ele)
+            }
+        }
+        context.currentData = context.tempData = uArr
+    }
+}
+exports.preNode = exports.pre  =()=>{
     //todo
 }
-exports.pre =()=>{}
-exports.next =()=>{}
-exports.move = ()=>{}
+
 exports.trim = (context) => {
     if (utils.Type.isString(context.currentData)) {
         context.currentData = context.tempData = context.currentData.trim()

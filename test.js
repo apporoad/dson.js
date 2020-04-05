@@ -75,6 +75,7 @@ it('test basic', async () =>{
 	var testRoot = await DSON().get('data[0]').root().find('updateUser').mark('users').do(json)
 	expect(testRoot.users.length).toBe(3)
 
+	var selectFn = j=> { return j.changeTimes}
 	var masks10  = await DSON().find('updateUser').count().mark('count')
 		.first().mark('first')
 		.root().get('data').last().mark('last')
@@ -86,6 +87,12 @@ it('test basic', async () =>{
 		.sum().mark('sum1')
 		.average().mark('avg1')
 		.max().mark('max1')
+		.min().mark('min1')
+		.root().get('data')
+		.sum(selectFn).mark('sum2')
+		.avg(selectFn).mark('avg2')
+		.max((a,b)=>{ return a.changeTimes > b.changeTimes}).mark('max2')
+		.min((a,b) => { return a.changeTimes < b.changeTimes}).mark('min2')
 		.do(json)
 	
 	expect(masks10.count).toBe(3)
@@ -95,7 +102,14 @@ it('test basic', async () =>{
 	expect(masks10.top2[0]).toBe('apporoad')
 	expect(masks10.random2.length).toBe(2)
 	expect(masks10.distinct.length).toBe(2)
-	expect()
+	expect(masks10.sum1).toBe(10)
+	expect(masks10.avg1 > 3).toBeTruthy()
+	expect(masks10.max1).toBe(5)
+	expect(masks10.min1).toBe(2)
+	expect(masks10.sum1 == masks10.sum2).toBeTruthy()
+	expect(masks10.avg1 == masks10.avg2) .toBeTruthy()
+	expect(masks10.max1 = masks10.max2.changeTimes).toBeTruthy()
+	expect(masks10.min1 = masks10.min2.changeTimes).toBeTruthy()
 	
 })
 

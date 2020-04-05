@@ -2,16 +2,6 @@ const utils = require('lisa.utils')
 const uType = utils.Type
 const ljson = require('lisa.json')
 
-function randUnique(start, end, size) {
-    var allNums = new Array;
-    size = size ? (size > end - start ? end - start : size) : 1;
-    for (var i = start, k = 0; i <= end; i++, k++) {
-        allNums[k] = i;
-    }
-    allNums.sort(function () { return 0.5 - Math.random(); });
-    return allNums.slice(0, size);
-}
-
 
 exports.get = (context, expression) => {
     if (expression && context.currentData) {
@@ -84,7 +74,7 @@ exports.random = (context, num) => {
         num = num || 1
         if (num < context.currentData.length) {
             var arr = []
-            randUnique(0, context.currentData.length - 1, num).forEach(ele => {
+            utils.randUnique(0, context.currentData.length - 1, num).forEach(ele => {
                 arr.push(context.currentData[ele])
             })
             if (num == 1) {
@@ -139,12 +129,12 @@ exports.average  =exports.avg = async (context, selectFn) => {
 }
 exports.max = async (context, compareFn) => {
     if (utils.Type.isArray(context.currentData)) {
-        context.tempData = context.currentData.length > 0 ? utils.ArraySort(context.currentData, compareFn)[0] : null
+        context.tempData = context.currentData.length > 0 ? utils.ArraySort(context.currentData, compareFn)[context.currentData.length -1] : null
     }
 }
 exports.min = async (context, compareFn) => {
     if (utils.Type.isArray(context.currentData)) {
-        context.tempData = context.currentData.length > 0 ? utils.ArraySort(context.currentData, compareFn)[context.currentData.length - 1] : null
+        context.tempData = context.currentData.length > 0 ? utils.ArraySort(context.currentData, compareFn)[0] : null
     }
 }
 exports.unique = (context, equilsFn) => {

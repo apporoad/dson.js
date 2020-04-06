@@ -150,8 +150,14 @@ exports.unique = (context, equilsFn) => {
         context.currentData = context.tempData = uArr
     }
 }
-exports.preNode = exports.pre  =()=>{
-    //todo
+exports.preNode = exports.pre  =(context,step)=>{
+    step = step || 1
+    if(context.position.length >0 ){
+        var index = context.position.length -1 -step
+        index = index >= 0 ?  index : 0
+        context.currentData = context.tempData = context.position[index]
+        //context.position.push(context.currentData)
+    }
 }
 
 exports.trim = (context) => {

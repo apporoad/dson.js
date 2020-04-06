@@ -37,7 +37,8 @@ function DSON() {
             tempData: data,     //当前记录的数据
             marks: {},
             autoMarks: {},
-            history: []
+            history: [],
+            position: []
         }
         for (var index = 0; index < _this._queue.length; index++) {
             var current = _this._queue[index]
@@ -51,6 +52,9 @@ function DSON() {
                     key: current.item,
                     value: context.tempData
                 })
+                if(context.position.length ==0 || (context.position.length >0 && context.position[context.position.length -1] != context.currentData)){
+                    context.position.push(context.currentData)
+                }
             }
         }
 

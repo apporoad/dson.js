@@ -1,6 +1,9 @@
 
 const DSON = require('./index')
+const LJ = require('lustjson.js')
+const sxg = require('./sxg')
 const JVD = require('jvd.js')
+const utils = require('lisa.utils')
 
 var json = {
 	"data": [{
@@ -8,12 +11,12 @@ var json = {
 		"preSeqNo": "11100000000023059",
 		"bizNo": "Z123420C0000",
 		"type": "2",
-        "bizType": "A",
-        "insertTime": "2020-03-26 10:25:58",
+		"bizType": "A",
+		"insertTime": "2020-03-26 10:25:58",
 		"insertUser": "aoir",
 		"updateTime": "2020-03-30 14:35:39",
-        "updateUser": "apporoad",
-        "dCorpType": "1",
+		"updateUser": "apporoad",
+		"dCorpType": "1",
 		"mode": "0514",
 		"chgMarkcd": "1",
 		"changeTimes": 5,
@@ -28,8 +31,8 @@ var json = {
 		"insertTime": "2099-03-26 10:25:58",
 		"insertUser": "aoier",
 		"updateTime": "2098-03-30 19:35:39",
-        "updateUser": "LiSA",
-        "dCorpType": "1",
+		"updateUser": "LiSA",
+		"dCorpType": "1",
 		"mode": "0614",
 		"chgMarkcd": "1",
 		"changeTimes": 2,
@@ -44,21 +47,21 @@ var json = {
 		"insertTime": "2019-03-26 10:25:58",
 		"insertUser": "aoier",
 		"updateTime": "2028-03-30 19:35:39",
-        "updateUser": "LiSA",
-        "dCorpType": "1",
+		"updateUser": "LiSA",
+		"dCorpType": "1",
 		"mode": "0714",
 		"chgMarkcd": "1",
 		"changeTimes": 3,
 		"status": "A1",
 		"dataSource": "2",
-    }],
+	}],
 	"total": 104,
 	"success": true,
 	"code": 200,
 	"message": null
 }
 
-it('test basic', async () =>{
+it('test basic', async () => {
 
 	// var masks = await DSON().get("data[0].mode").mark('oneMode').do(json)	
 	// expect(masks.oneMode).toBe('0514')
@@ -75,14 +78,14 @@ it('test basic', async () =>{
 	var testRoot = (await DSON().get('data[0]').root().find('updateUser').mark('users').do(json)).marks
 	expect(testRoot.users.length).toBe(3)
 
-	var selectFn = j=> { return j.changeTimes}
-	var all  = await DSON().find('updateUser').count().mark('count')
+	var selectFn = j => { return j.changeTimes }
+	var all = await DSON().find('updateUser').count().mark('count')
 		.first().mark('first')
 		.root().get('data').last().mark('last')
 		.root().find('updateUser').last(2).mark('last2')
 		.root().find('updateUser').top(2).mark('top2')
 		.root().find('updateUser').random(2).mark('random2')
-		.root().find('data').first().distinct( (a,b) =>{ return a.updateUser == b.updateUser}).mark('distinct')
+		.root().find('data').first().distinct((a, b) => { return a.updateUser == b.updateUser }).mark('distinct')
 		.root().find('changeTimes')
 		.sum().mark('sum1')
 		.average().mark('avg1')
@@ -91,16 +94,16 @@ it('test basic', async () =>{
 		.root().get('data')
 		.sum(selectFn).mark('sum2')
 		.avg(selectFn).mark('avg2')
-		.max((a,b)=>{ return a.changeTimes > b.changeTimes}).mark('max2')
-		.min((a,b) => { return a.changeTimes < b.changeTimes}).mark('min2')
-		.root().find('updateUser').unique((a,b)=> {return a ==b}).mark('unique')
+		.max((a, b) => { return a.changeTimes > b.changeTimes }).mark('max2')
+		.min((a, b) => { return a.changeTimes > b.changeTimes }).mark('min2')
+		.root().find('updateUser').unique((a, b) => { return a == b }).mark('unique')
 		.pre().mark('p1')
 		.get('[0]')
 		.pre().mark('p2')
 		.do(json)
-		var marks10 = all.marks
-		var automarks10 = all.autoMarks
-	
+	var marks10 = all.marks
+	var automarks10 = all.autoMarks
+
 	expect(marks10.count).toBe(3)
 	expect(marks10.first).toBe('apporoad')
 	expect(marks10.last.status).toBe('A1')
@@ -113,16 +116,36 @@ it('test basic', async () =>{
 	expect(marks10.max1).toBe(5)
 	expect(marks10.min1).toBe(2)
 	expect(marks10.sum1 == marks10.sum2).toBeTruthy()
-	expect(marks10.avg1 == marks10.avg2) .toBeTruthy()
-	expect(marks10.max1 = marks10.max2.changeTimes).toBeTruthy()
-	expect(marks10.min1 = marks10.min2.changeTimes).toBeTruthy()
+	expect(marks10.avg1 == marks10.avg2).toBeTruthy()
+	expect(marks10.max1 == marks10.max2.changeTimes).toBeTruthy()
+	expect(marks10.min1 == marks10.min2.changeTimes).toBeTruthy()
 	expect(marks10.unique[0]).toBe('apporoad')
 
 	expect(automarks10.unique[0]).toBe('apporoad')
 	expect(marks10.p1 == marks10.p2).toBeTruthy()
-	
+
 })
 
+//test sxg
+it('test sxg', async () => {
+	var json = {
+		hello: "            goood  good day      ",
+		peers: [
+			{
+				hi: '           L   i     S             A                '
+			}
+		]
+	}
+	var options = {
+		stringHandler: (str) => {
+			if (str)
+				return str.trim()
+			return str
+		}
+	}
+	var newJson = await LJ.get(json,sxg,options)
+
+})
 
 
 //找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA
@@ -139,8 +162,8 @@ it('test basic', async () =>{
 
 // 校验bizNo 是否均符合要求
 
-		
-		
+
+
 
 // var dson = DSON().find({
 //     key : 'asdf'
@@ -164,99 +187,99 @@ it('test basic', async () =>{
 
 
 var testJson = {
-	hello : 'good good day',
-	data : [
+	hello: 'good good day',
+	data: [
 		{
-			id : 1,
-			name : 'LiSA',
-			job :  [{
-				name : 'singer',
-				long : 11,
-				remark : 'main job'
-			},{
-				name : 'wife',
-				long : 0
+			id: 1,
+			name: 'LiSA',
+			job: [{
+				name: 'singer',
+				long: 11,
+				remark: 'main job'
+			}, {
+				name: 'wife',
+				long: 0
 			}],
-			profile : {
-				height : 165,
-				weight : 48,
-				nice : 95
+			profile: {
+				height: 165,
+				weight: 48,
+				nice: 95
 			}
-		},{
-			id : 2,
-			name : 'luna',
-			job :  [{
-				name : 'singer',
-				long : 8,
-				remark : 'main job'
-			},{
-				name : 'model',
-				long : 5
+		}, {
+			id: 2,
+			name: 'luna',
+			job: [{
+				name: 'singer',
+				long: 8,
+				remark: 'main job'
+			}, {
+				name: 'model',
+				long: 5
 			}],
-			profile : {
-				height : 155,
-				weight : 45,
-				nice : 93
+			profile: {
+				height: 155,
+				weight: 45,
+				nice: 93
 			}
-		},{
-			id : 3,
-			name : 'eir',
-			job :  [{
-				name : 'singer',
-				long : 8,
-				remark : 'main job'
+		}, {
+			id: 3,
+			name: 'eir',
+			job: [{
+				name: 'singer',
+				long: 8,
+				remark: 'main job'
 			}],
-			profile : {
-				height : 160,
-				weight : 50,
-				nice : 99
+			profile: {
+				height: 160,
+				weight: 50,
+				nice: 99
 			}
-		},{
-			id : 1,
-			name : 'fade',
-			job :  [{
-				name : 'actor',
-				long : 3,
-				remark : 'main job'
-			},{
-				name : 'singer',
-				long : 1
+		}, {
+			id: 1,
+			name: 'fade',
+			job: [{
+				name: 'actor',
+				long: 3,
+				remark: 'main job'
+			}, {
+				name: 'singer',
+				long: 1
 			}],
-			profile : {
-				height : 170,
-				weight : 65,
-				nice : 50
+			profile: {
+				height: 170,
+				weight: 65,
+				nice: 50
 			}
-		},{
-			id : 5,
-			name : 'zhoubichang',
-			job :  [{
-				name : 'singer',
-				long : 3,
-				remark : 'main job'
-			},{
-				name : 'wife',
-				long : 3
+		}, {
+			id: 5,
+			name: 'zhoubichang',
+			job: [{
+				name: 'singer',
+				long: 3,
+				remark: 'main job'
+			}, {
+				name: 'wife',
+				long: 3
 			}],
-			profile : {
-				height : 162,
-				weight : 55,
-				nice : 34
+			profile: {
+				height: 162,
+				weight: 55,
+				nice: 34
 			}
-		},{
-			id : 6,
-			name : 'moti',
-			job :  [{
-				name : 'singer',
-				long : 3
-			},{
-				name : 'zhibo',
-				long : 3
+		}, {
+			id: 6,
+			name: 'moti',
+			job: [{
+				name: 'singer',
+				long: 3
+			}, {
+				name: 'zhibo',
+				long: 3
 			}],
-			profile : {
-				height : 148,
-				weight : 43,
-				nice : 97
+			profile: {
+				height: 148,
+				weight: 43,
+				nice: 97
 			}
 		}
 	]

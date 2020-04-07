@@ -66,7 +66,7 @@ exports.getLustForKV = (k,v,options,innerLJ) => { return {}}
  * is the node of other  a lust , example :  ()=>{}
  * 判断json中的节点是否是lust
  */
-exports.isLustForOthers= (obj,options)=>{ 
+exports.isLustForOthers= (obj,options,innerLJ)=>{ 
     options.cache = options.cache || []
     if(options && options.othersHandler && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree) ){
         options.cache.push(innerLJ.LJ.dotTree)

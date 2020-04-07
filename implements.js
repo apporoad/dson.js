@@ -2,6 +2,7 @@ const utils = require('lisa.utils')
 const uType = utils.Type
 const ljson = require('lisa.json')
 const sxg = require('./sxg')
+const LJ = require('lustjson.js')
 
 
 exports.get = (context, expression) => {
@@ -150,13 +151,36 @@ exports.unique = (context, equilsFn) => {
     }
 }
 exports.preNode = exports.pre = (context, step) => {
-    //todo
     step = step || 1
     if (context.position.length > 0) {
         var index = context.position.length - 1 - step
         index = index >= 0 ? index : 0
         context.currentData = context.tempData = context.position[index]
         context.position.push(context.currentData)
+    }
+}
+exports.goto = (context , mark) => {
+    if(mark){
+        if(context.marks[mark]){
+            context.currentData = context.tempData = context.marks[mark]
+            context.position.push(context.currentData)
+        }else if( context.autoMarks[mark]){
+            context.currentData = context.tempData = context.autoMarks[index]
+            context.position.push(context.currentData)
+        }
+    }else{
+        //找到history的上次mark
+        var lastMark = null
+        for(var i= context.history.length- 1 ;i>=0;i--){
+            if(context.history[i].key == 'mark'){
+                lastMark = context.history[i].value
+                break
+            }
+        }
+        if(lastMark){
+            context.currentData = context.tempData = lastMark
+            context.position.push(context.currentData)
+        }
     }
 }
 

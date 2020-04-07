@@ -5,6 +5,7 @@ const sxg = require('./sxg')
 const JVD = require('jvd.js')
 const utils = require('lisa.utils')
 
+
 var json = {
 	"data": [{
 		"id": "5ce232d2-92b1-499f-8d07-6de444df6847",
@@ -178,21 +179,21 @@ it('test str operation', async () => {
 		]
 	}]
 
-	var all = await DSON().get('[0]').get('trim').trim()
-		.pre().trimAll()
-		.pre().get('trimStart').trimStart()
-		.pre().trimStartAll()
-		.pre().get('trimEnd').trimEnd()
-		.pre().trimEndAll()
-		.pre().get('replace').replace('${abc}','hello')
-		.pre().replaceAll('${abc}','hello').mark('r1')
-		.pre().replaceAll(null,'hi',(a,b)=>{ 
+	var all = await DSON().get('[0]').mark('obj').mark().get('trim').trim()
+		.goto().trimAll()
+		.goto('obj').get('trimStart').trimStart()
+		.goto().trimStartAll()
+		.goto().get('trimEnd').trimEnd()
+		.goto().trimEndAll()
+		.goto().get('replace').replace('${abc}','hello')
+		.goto().replaceAll('${abc}','hello').mark('r1')
+		.goto().replaceAll(null,'hi',(a,b)=>{ 
 			return a ? (a.r  || false) : false
 		}).mark('r2')
 		.do(json)
 
 	expect(all.autoMarks.trim).toBe('la la')
-	expect(all.autoMarks.trimAll.trim).toBe('lala')
+	expect(all.autoMarks.trimAll.trim).toBe('la la')
 })
 
 //找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA

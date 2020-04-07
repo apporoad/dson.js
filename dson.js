@@ -1,4 +1,5 @@
 const utils = require('lisa.utils')
+
 function DSON() {
     _this = this
     this._implements = {}
@@ -33,8 +34,8 @@ function DSON() {
     this.do = this.run = this.go = async (data) => {
         var context = {
             root: data,
-            currentData: data,   //当前位置对应的数据
-            tempData: data,     //当前记录的数据
+            currentData: data, //当前位置对应的数据
+            tempData: data, //当前记录的数据
             marks: {},
             autoMarks: {},
             history: [],
@@ -47,20 +48,22 @@ function DSON() {
             if (current.item != 'mark') {
                 //auto mark
                 context.autoMarks[current.item] = context.tempData
-                //history
-                context.history.push({
-                    key: current.item,
-                    value: context.tempData
-                })
-                if(context.position.length ==0 || (context.position.length >0 && context.position[context.position.length -1] != context.currentData)){
+
+                if (context.position.length == 0 || (context.position.length > 0 && context.position[context.position.length - 1] != context.currentData)) {
                     context.position.push(context.currentData)
                 }
             }
+            //history mark也有历史
+            context.history.push({
+                key: current.item,
+                params : current.params,
+                value: context.tempData
+            })
         }
 
         return context
     }
-    this.test = () => { }
+    this.test = () => {}
     this.doTest = () => {
 
     }

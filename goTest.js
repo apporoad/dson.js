@@ -1,8 +1,8 @@
 
 
 it = (title, fn) => {
-  if (fn)
-    fn()
+  // if (fn)
+  //   fn()
 }
 expect = () => {
   return {
@@ -11,5 +11,8 @@ expect = () => {
   }
 }
 
-
+it2 = (title,fn)=>{
+  if(fn)
+    fn()
+}
 require('./test')

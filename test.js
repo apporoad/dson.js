@@ -5,6 +5,7 @@ const sxg = require('./sxg')
 const JVD = require('jvd.js')
 const utils = require('lisa.utils')
 
+var it2 = global.debug || it
 
 var json = {
 	"data": [{

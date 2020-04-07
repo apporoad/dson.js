@@ -96,9 +96,7 @@ exports.top = (context, num) => {
 
     }
 }
-exports.where = exports.filter = (context, jvdOrTemplate) => {
-    //todo
-}
+
 exports.distinct = (context, compareFn) => {
     if (utils.Type.isArray(context.currentData)) {
         context.currentData = context.tempData = utils.ArrayDistinct(context.currentData, compareFn)
@@ -159,25 +157,25 @@ exports.preNode = exports.pre = (context, step) => {
         context.position.push(context.currentData)
     }
 }
-exports.goto = (context , mark) => {
-    if(mark){
-        if(context.marks[mark]){
+exports.goto = (context, mark) => {
+    if (mark) {
+        if (context.marks[mark]) {
             context.currentData = context.tempData = context.marks[mark]
             context.position.push(context.currentData)
-        }else if( context.autoMarks[mark]){
+        } else if (context.autoMarks[mark]) {
             context.currentData = context.tempData = context.autoMarks[index]
             context.position.push(context.currentData)
         }
-    }else{
+    } else {
         //找到history的上次mark
         var lastMark = null
-        for(var i= context.history.length- 1 ;i>=0;i--){
-            if(context.history[i].key == 'mark'){
+        for (var i = context.history.length - 1; i >= 0; i--) {
+            if (context.history[i].key == 'mark') {
                 lastMark = context.history[i].value
                 break
             }
         }
-        if(lastMark){
+        if (lastMark) {
             context.currentData = context.tempData = lastMark
             context.position.push(context.currentData)
         }
@@ -243,14 +241,10 @@ exports.trimEndAll = async (context, stringOrArray) => {
         context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
     }
 }
-exports.toUpperCase = exports.toUpper = (context) => {
-    if (utils.Type.isString(context.currentData)) {
-        context.currentData = context.tempData = context.currentData.toUpperCase()
-    }
-}
-exports.toUpperCaseAll = exports.toUpperAll = async (context) => {
+
+exports.toUpperCase = exports.toUpper = async (context) => {
     if (uType.isString(context.currentData)) {
-        exports.toUpper(context)
+        context.currentData = context.tempData = context.currentData.toUpperCase()
     } else if (uType.isObject(context.currentData) || uType.isArray(context.currentData)) {
         var options = {
             stringHandler: (str) => {
@@ -262,14 +256,9 @@ exports.toUpperCaseAll = exports.toUpperAll = async (context) => {
         context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
     }
 }
-exports.toLowerCase = exports.toLower = (context) => {
-    if (utils.Type.isString(context.currentData)) {
-        context.currentData = context.tempData = context.currentData.toLowerCase()
-    }
-}
-exports.toLowerCaseAll = exports.toLowerAll = async (context) => {
+exports.toLowerCase = exports.toLower = async (context) => {
     if (uType.isString(context.currentData)) {
-        exports.toLowerCase(context)
+        context.currentData = context.tempData = context.currentData.toLowerCase()
     } else if (uType.isObject(context.currentData) || uType.isArray(context.currentData)) {
         var options = {
             stringHandler: (str) => {
@@ -326,10 +315,20 @@ exports.substring = (context, start, end) => {
         context.currentData = context.tempData = context.currentData.substring(start, end)
     }
 }
+
+exports.order
+
+
+//  以下方法为模板操作方法+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+exports.where = exports.filter = (context, jvdOrTemplate) => {
+    //todo
+}
 exports.format = () => {
     //todo 
 
     // format json
 }
-exports.order
-exports.select
+
+exports.select = exports.draw
+
+exports.test = exports.expect

@@ -13,6 +13,7 @@ function DSON() {
                 case 'add':
                 case 'run':
                 case 'go':
+                case 'draw':
                     console.log('DSON key string cannot be reged : ' + itemName)
                     return
                 default:
@@ -31,6 +32,17 @@ function DSON() {
     }
     this.add = this.reg
 
+    /**
+     * 执行抽取操作，返回context中的最后的值
+     */
+    this.doDraw = this.doSelect = async data =>{
+        var context = await _this.do(data)
+        return context.tempData
+    }
+
+    /**
+     *  执行dson
+     */
     this.do = this.run = this.go = async (data) => {
         var context = {
             root: data,
@@ -63,11 +75,9 @@ function DSON() {
 
         return context
     }
-    this.test = () => {}
     this.doTest = () => {
 
     }
-
     return this
 }
 

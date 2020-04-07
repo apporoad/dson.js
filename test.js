@@ -162,7 +162,7 @@ it('test sxg', async () => {
 it('test str operation', async () => {
 	var json = [{
 		trim: "  la la  ",
-		trimStart : '  strat  ',
+		trimStart : '  start  ',
 		trimEnd : '  end  ',
 		upper : 'abc',
 		lower : 'ABCDEF',
@@ -181,19 +181,37 @@ it('test str operation', async () => {
 
 	var all = await DSON().get('[0]').mark('obj').mark().get('trim').trim()
 		.goto().trimAll()
+		.goto('obj').get('upper').toUpper().mark('u1')
+		.goto('obj').toUpper().mark('u2')
+		.goto('obj').get('lower').toLower().mark('l1')
+		.goto('obj').toLower().mark('l2')
 		.goto('obj').get('trimStart').trimStart()
-		.goto().trimStartAll()
+		.goto().trimStartAll(' ')
 		.goto().get('trimEnd').trimEnd()
-		.goto().trimEndAll()
+    	.goto().trimEndAll(' ')
 		.goto().get('replace').replace('${abc}','hello')
 		.goto().replaceAll('${abc}','hello').mark('r1')
-		.goto().replaceAll(null,'hi',(a,b)=>{ 
+		.goto('obj').replaceAll(null,'hi',(a,b)=>{ 
 			return a ? (a.r  || false) : false
 		}).mark('r2')
 		.do(json)
 
+	expect(all.marks.l1).toBe('abcdef')
+	expect(all.marks.l2.lower).toBe('abcdef')
+	expect(all.marks.u1).toBe('ABC')
+	expect(all.marks.u2.upper).toBe('ABC')
 	expect(all.autoMarks.trim).toBe('la la')
 	expect(all.autoMarks.trimAll.trim).toBe('la la')
+	expect(all.autoMarks.trimStart).toBe('start  ')
+	expect(all.autoMarks.trimStartAll.trimStart).toBe('start  ')
+	expect(all.autoMarks.trimEnd).toBe('  end')
+	expect(all.autoMarks.trimEndAll.trimEnd).toBe('  end')
+	expect(all.autoMarks.replace).toBe('helloced')
+	expect(all.marks.r1.replace).toBe('helloced')
+	expect(all.marks.r2.replaceObj).toBe('hi')
+	expect(all.marks.r2.replaceArray[1]).toBe('hi')
+
+	expect( await DSON().get('[0].upper').doDraw(json)).toBe('abc')
 })
 
 //找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA

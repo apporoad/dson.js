@@ -24,7 +24,6 @@ exports.isLustForString = (str,options,innerLJ) =>{
  * 获取lust from String
  */
 exports.getLustForString = async (str,options, innerLJ) =>{
-    
     var params = [str].concat(options.params || [])
     return  await Promise.resolve( options.stringHandler.apply(this,params)) 
 }
@@ -33,19 +32,29 @@ exports.getLustForString = async (str,options, innerLJ) =>{
  * is the Object in Arry a lust  ,example : [{ isLust: true, hello: ' world'}]
  * 判断数组中对象是否是Lust
  */
-exports.isLustForObject = (obj,options) =>{ return false }
+exports.isLustForObject = (obj,options,innerLJ) =>{ 
+    options.cache = options.cache || []
+    if(options && options.othersHandler && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree) ){
+        options.cache.push(innerLJ.LJ.dotTree)
+        return true
+    }
+    return false 
+}
 
 /**
  * get lustInfo from Object when isLustForObject is true
  * 获取lust from Object
  */
-exports.getLustForObject =(obj,options,innerLJ)=>{ return {} } 
+exports.getLustForObject =async (obj,options,innerLJ)=>{ 
+    var params = [obj].concat(options.params || [])
+    return  await Promise.resolve( options.othersHandler.apply(this,params)) 
+ } 
 
 /**
  * is the node of json  a lust , example : { '???':{ 'hello': 'world'}}
  * 判断json中的节点是否是lust
  */
-exports.isLustForKV = (k,v,options)=>{ return k === "???" }
+exports.isLustForKV = (k,v,options)=>{ return false }
 
 /**
  * get lustInfo from node of json when isLustForKV is true
@@ -57,13 +66,23 @@ exports.getLustForKV = (k,v,options,innerLJ) => { return {}}
  * is the node of other  a lust , example :  ()=>{}
  * 判断json中的节点是否是lust
  */
-exports.isLustForOthers= (obj,options)=>{ return k === "???" }
+exports.isLustForOthers= (obj,options)=>{ 
+    options.cache = options.cache || []
+    if(options && options.othersHandler && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree) ){
+        options.cache.push(innerLJ.LJ.dotTree)
+        return true
+    }
+    return false
+}
 
 /**
  * get lustInfo from node of json when isLustForOthers is true
  * 获取lust 
  */
-exports.getLustForOthers= (obj,options,innerLJ) => { return {}}
+exports.getLustForOthers= async (obj,options,innerLJ) => { 
+    var params = [obj].concat(options.params || [])
+    return  await Promise.resolve( options.othersHandler.apply(this,params)) 
+}
 
 
 /**
@@ -80,9 +99,9 @@ exports.afterSatifyOneLust = (lustInfo,options) =>{}
  * 满足所有lust之后触发行为
  */
 exports.afterSatifyAllLust = (lustJson,options) =>{
-    return new Promise((r,j)=>{r({
+    return {
         isRemakeLustJson : false
-    })})
+    }
 }
 
 /**

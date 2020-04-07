@@ -128,25 +128,72 @@ it('test basic', async () => {
 
 //test sxg
 it('test sxg', async () => {
-	var json = {
+	var json = [{
 		hello: "            goood  good day      ",
 		peers: [
 			{
 				hi: '           L   i     S             A                '
 			}
-		]
-	}
+		],
+		test : {
+			lily : true
+		}
+	}]
 	var options = {
 		stringHandler: (str) => {
 			if (str)
 				return str.trim()
 			return str
+		},
+		othersHandler : (obj) =>{
+			if(obj && obj.lily == true){
+				return 'hello lily'
+			}
 		}
 	}
-	var newJson = await LJ.get(json,sxg,options)
-
+	var newJson = await LJ.get(utils.deepCopy(json),sxg,options)
+	expect(json[0].hello).toBe("            goood  good day      ")
+	expect(newJson[0].hello).toBe("goood  good day")
+	expect(newJson[0].test).toBe('hello lily')
 })
 
+//test trim and so on
+it('test str operation', async () => {
+	var json = [{
+		trim: "  la la  ",
+		trimStart : '  strat  ',
+		trimEnd : '  end  ',
+		upper : 'abc',
+		lower : 'ABCDEF',
+		replace : '${abc}ced',
+		replaceObj : {
+			r : true
+		},
+		replaceArray : [
+			'${abc}eee',
+			{
+				r:true
+			},
+			'hello'
+		]
+	}]
+
+	var all = await DSON().get('[0]').get('trim').trim()
+		.pre().trimAll()
+		.pre().get('trimStart').trimStart()
+		.pre().trimStartAll()
+		.pre().get('trimEnd').trimEnd()
+		.pre().trimEndAll()
+		.pre().get('replace').replace('${abc}','hello')
+		.pre().replaceAll('${abc}','hello').mark('r1')
+		.pre().replaceAll(null,'hi',(a,b)=>{ 
+			return a ? (a.r  || false) : false
+		}).mark('r2')
+		.do(json)
+
+	expect(all.autoMarks.trim).toBe('la la')
+	expect(all.autoMarks.trimAll.trim).toBe('lala')
+})
 
 //找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA
 

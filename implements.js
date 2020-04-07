@@ -1,13 +1,13 @@
 const utils = require('lisa.utils')
 const uType = utils.Type
 const ljson = require('lisa.json')
+const sxg = require('./sxg')
 
 
 exports.get = (context, expression) => {
     if (expression && context.currentData) {
         if (utils.Type.isObject(context.currentData) || utils.Type.isArray(context.currentData)) {
-            context.currentData = context.tempData
-                = ljson(context.currentData).get(expression)
+            context.currentData = context.tempData = ljson(context.currentData).get(expression)
         }
     }
 }
@@ -49,8 +49,7 @@ exports.root = (context) => {
 exports.count = (context) => {
     if (utils.Type.isArray(context.currentData)) {
         context.tempData = context.currentData.length
-    }
-    else {
+    } else {
         context.tempData = 0
     }
 }
@@ -89,7 +88,7 @@ exports.top = (context, num) => {
     if (utils.Type.isArray(context.currentData)) {
         num = num || 1
         if (num == 1) {
-            context.currentData= context.tempData = context.currentData.length > 0 ? context.currentData[0] : null
+            context.currentData = context.tempData = context.currentData.length > 0 ? context.currentData[0] : null
         } else {
             context.currentData = context.tempData = context.currentData.slice(0, (num || 1))
         }
@@ -122,14 +121,14 @@ exports.sum = async (context, selectFn) => {
         context.tempData = await sum(context.currentData, selectFn)
     }
 }
-exports.average  =exports.avg = async (context, selectFn) => {
+exports.average = exports.avg = async (context, selectFn) => {
     if (utils.Type.isArray(context.currentData)) {
         context.tempData = context.currentData.length > 0 ? (await sum(context.currentData, selectFn)) / context.currentData.length : 0
     }
 }
 exports.max = async (context, compareFn) => {
     if (utils.Type.isArray(context.currentData)) {
-        context.tempData = context.currentData.length > 0 ? utils.ArraySort(context.currentData, compareFn)[context.currentData.length -1] : null
+        context.tempData = context.currentData.length > 0 ? utils.ArraySort(context.currentData, compareFn)[context.currentData.length - 1] : null
     }
 }
 exports.min = async (context, compareFn) => {
@@ -138,25 +137,26 @@ exports.min = async (context, compareFn) => {
     }
 }
 exports.unique = (context, equilsFn) => {
-    if(uType.isArray(context.currentData)){
+    if (uType.isArray(context.currentData)) {
         //todo
         var uArr = []
-        for(var i =0 ;i < context.currentData.length;i++){
+        for (var i = 0; i < context.currentData.length; i++) {
             var ele = context.currentData[i]
-            if(utils.ArrayFilter(context.currentData,ele,equilsFn).length ==1){
+            if (utils.ArrayFilter(context.currentData, ele, equilsFn).length == 1) {
                 uArr.push(ele)
             }
         }
         context.currentData = context.tempData = uArr
     }
 }
-exports.preNode = exports.pre  =(context,step)=>{
+exports.preNode = exports.pre = (context, step) => {
+    //todo
     step = step || 1
-    if(context.position.length >0 ){
-        var index = context.position.length -1 -step
-        index = index >= 0 ?  index : 0
+    if (context.position.length > 0) {
+        var index = context.position.length - 1 - step
+        index = index >= 0 ? index : 0
         context.currentData = context.tempData = context.position[index]
-        //context.position.push(context.currentData)
+        context.position.push(context.currentData)
     }
 }
 
@@ -165,48 +165,132 @@ exports.trim = (context) => {
         context.currentData = context.tempData = context.currentData.trim()
     }
 }
-exports.trimAll = (context) => {
-    //todo
+exports.trimAll = async (context) => {
+    if (uType.isString(context.currentData)) {
+        exports.trim(context)
+    } else if (uType.isObject(context.currentData) || uType.isArray(context.currentData)) {
+        var options = {
+            stringHandler: (str) => {
+                if (str)
+                    return str.trim()
+                return str
+            }
+        }
+        context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
+    }
 }
 exports.trimStart = (context, stringOrArray) => {
     if (utils.Type.isString(context.currentData)) {
         context.currentData = context.tempData = utils.startTrim(context.currentData, stringOrArray)
     }
 }
-exports.trimStartAll = (context, stringOrArray) => {
-    //todo
+exports.trimStartAll = async (context, stringOrArray) => {
+    if (uType.isString(context.currentData)) {
+        exports.trimStart(context, stringOrArray)
+    } else if (uType.isObject(context.currentData) || uType.isArray(context.currentData)) {
+        var options = {
+            stringHandler: (str, stringOrArray) => {
+                if (str)
+                    return utils.startTrim(str, stringOrArray)
+                return str
+            },
+            params: [stringOrArray]
+        }
+        context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
+    }
 }
 exports.trimEnd = (context, stringOrArray) => {
     if (utils.Type.isString(context.currentData)) {
         context.currentData = context.tempData = utils.endTrim(context.currentData, stringOrArray)
     }
 }
-exports.trimEndAll = (context, stringOrArray) => {
-    //todo
+exports.trimEndAll = async (context, stringOrArray) => {
+    if (uType.isString(context.currentData)) {
+        exports.trimEnd(context, stringOrArray)
+    } else if (uType.isObject(context.currentData) || uType.isArray(context.currentData)) {
+        var options = {
+            stringHandler: (str, stringOrArray) => {
+                if (str)
+                    return utils.endTrim(str, stringOrArray)
+                return str
+            },
+            params: [stringOrArray]
+        }
+        context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
+    }
 }
 exports.toUpperCase = exports.toUpper = (context) => {
     if (utils.Type.isString(context.currentData)) {
         context.currentData = context.tempData = context.currentData.toUpperCase()
     }
 }
-exports.toUpperCaseAll = exports.toUpperAll = (context) => {
-    //todo
+exports.toUpperCaseAll = exports.toUpperAll = async (context) => {
+    if (uType.isString(context.currentData)) {
+        exports.toUpper(context)
+    } else if (uType.isObject(context.currentData) || uType.isArray(context.currentData)) {
+        var options = {
+            stringHandler: (str) => {
+                if (str)
+                    return str.toUpperCase()
+                return str
+            }
+        }
+        context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
+    }
 }
 exports.toLowerCase = exports.toLower = (context) => {
     if (utils.Type.isString(context.currentData)) {
         context.currentData = context.tempData = context.currentData.toLowerCase()
     }
 }
-exports.toLowerCaseAll = exports.toLowerAll = (context) => { }
+exports.toLowerCaseAll = exports.toLowerAll = async (context) => {
+    if (uType.isString(context.currentData)) {
+        exports.toLowerCase(context)
+    } else if (uType.isObject(context.currentData) || uType.isArray(context.currentData)) {
+        var options = {
+            stringHandler: (str) => {
+                if (str)
+                    return str.toLowerCase()
+                return str
+            }
+        }
+        context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
+    }
+}
 
 exports.replace = (context, regex, replaceValue, equilsFn) => {
+    // 字符串替换
     if (utils.Type.isString(context.currentData) && (uType.isRegExp(regex) || uType.isString(regex))) {
         context.currentData = context.tempData = context.currentData.replace(regex, replaceValue)
+    } else {
+        //其他替换方式
+        if (equilsFn && equilsFn(context.currentData, regex)) {
+            context.currentData = context.tempData = replaceValue
+        }
     }
-    //todo
 }
-exports.replaceAll = () => {
-    //todo
+exports.replaceAll = async (context, regex, replaceValue, equilsFn) => {
+    if (uType.isArray(context.currentData) || uType.isObject(context.currentData)) {
+        var options = {
+            stringHandler: (str) => {
+                if (uType.isRegExp(regex) || uType.isString(regex))
+                    return str.replace(regex, replaceValue)
+                if (equilsFn && equilsFn(str, regex)) {
+                    return replaceValue
+                }
+                return str
+            },
+            othersHandler: (obj) => {
+                if (equilsFn && equilsFn(obj, regex)) {
+                    return replaceValue
+                }
+                return obj
+            }
+        }
+        context.currentData = context.tempData = await LJ.get(utils.deepCopy(context.currentData), sxg, options)
+    } else {
+        exports.replace(context, regex, replaceValue, equilsFn)
+    }
 }
 exports.substr = (context, from, length) => {
     if (uType.isString(context.currentData)) {

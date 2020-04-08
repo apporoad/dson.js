@@ -329,6 +329,6 @@ exports.format = () => {
     // format json
 }
 
-exports.select = exports.draw
+exports.select = exports.draw = exports.extract
 
 exports.test = exports.expect

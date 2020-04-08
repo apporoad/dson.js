@@ -55,12 +55,13 @@ function DSON() {
         }
         for (var index = 0; index < _this._queue.length; index++) {
             var current = _this._queue[index]
-            var params = [context].concat(current.params)
+            var pureParams = current.params.length>0 ? current.params : (_this.defaultParams || [])
+            var params = [context].concat(pureParams)
             await Promise.resolve(_this._implements[current.item].apply(_this, params))
             if (current.item != 'mark') {
                 //auto mark
                 context.autoMarks[current.item] = context.tempData
-
+                // postion 也通用不记录mark情况
                 if (context.position.length == 0 || (context.position.length > 0 && context.position[context.position.length - 1] != context.currentData)) {
                     context.position.push(context.currentData)
                 }
@@ -68,7 +69,7 @@ function DSON() {
             //history mark也有历史
             context.history.push({
                 key: current.item,
-                params : current.params,
+                params : params,
                 value: context.tempData
             })
         }

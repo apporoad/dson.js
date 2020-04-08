@@ -5,7 +5,7 @@ const sxg = require('./sxg')
 const LJ = require('lustjson.js')
 
 
-exports.get = (context, expression) => {
+exports.get = exports.fetch = (context, expression) => {
     if (expression && context.currentData) {
         if (utils.Type.isObject(context.currentData) || utils.Type.isArray(context.currentData)) {
             context.currentData = context.tempData = ljson(context.currentData).get(expression)
@@ -157,7 +157,7 @@ exports.preNode = exports.pre = (context, step) => {
         context.position.push(context.currentData)
     }
 }
-exports.goto = (context, mark) => {
+exports.goto = exports.travel = exports.chuanyue = (context, mark) => {
     if (mark) {
         if (context.marks[mark]) {
             context.currentData = context.tempData = context.marks[mark]
@@ -332,3 +332,5 @@ exports.format = () => {
 exports.select = exports.draw = exports.extract
 
 exports.test = exports.expect
+
+exports.print = ()=>{}

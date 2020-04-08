@@ -1,5 +1,5 @@
 
-const DSON = require('./index')
+const d = D = DSON = require('./index')
 const LJ = require('lustjson.js')
 const sxg = require('./sxg')
 const JVD = require('jvd.js')
@@ -215,6 +215,14 @@ it('test str operation', async () => {
 	expect( await DSON().get('[0].upper').doDraw(json)).toBe('abc')
 })
 
+it('test defaultParams', async()=>{
+	var json = {
+		hello : ' lLiSA '
+	}
+	var result = await DSON([' ','l']).trimStartAll().doSelect(json)
+	expect(result.hello).toBe('LiSA ')
+})
+
 //找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA
 
 //判断 是否存在 updateTime <insertTime 的数据
@@ -352,6 +360,9 @@ var testJson = {
 	]
 }
 
+it2('test where / filter',async ()=>{
+	d().get('data').where(d('job').get().test('>2')).print()
+})
 
 // DSON().get('data').count().mark('dataCount').each()
 // DSON().get('data').count().mark('dataCount').all()

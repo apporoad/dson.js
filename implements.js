@@ -333,4 +333,11 @@ exports.select = exports.draw = exports.extract
 
 exports.test = exports.expect
 
-exports.print = ()=>{}
+exports.print = (context, expression)=>{}
+
+exports.push = ()=>{}
+exports.pop
+
+exports.each = exports.forEach 
+
+exports.sequence 

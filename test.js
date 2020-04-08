@@ -362,6 +362,12 @@ var testJson = {
 
 it2('test where / filter',async ()=>{
 	d().get('data').where(d('job').get().test('>2')).print()
+	d().get('data').where(d('job').get().test(JVD().gt(2))).print()
+	d().get('data').where(d('job').get().count().test(JVD().gt(2))).print()
+	d('data').get().where((data,context)=>{ return data.job.length > 2}).print()
+	d('data').get().where({job:'>2'}).print()
+
+	//寻找已婚美女的名字
 })
 
 // DSON().get('data').count().mark('dataCount').each()

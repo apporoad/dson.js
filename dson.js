@@ -32,6 +32,8 @@ function DSON() {
     }
     this.add = this.reg
 
+    this.isDSON=()=>{return true}
+
     /**
      * 执行抽取操作，返回context中的最后的值
      */

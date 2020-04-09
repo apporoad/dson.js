@@ -1,8 +1,8 @@
 
-const d = D = DSON = require('./index')
+const d = D = DSON = require('./index').DSON
 const LJ = require('lustjson.js')
 const sxg = require('./sxg')
-const JVD = require('jvd.js')
+const JVD = require('./index').JVD
 const utils = require('lisa.utils')
 
 var it2 = global.debug || it
@@ -215,13 +215,14 @@ it('test str operation', async () => {
 	expect( await DSON().get('[0].upper').doDraw(json)).toBe('abc')
 })
 
-it('test defaultParams', async()=>{
-	var json = {
-		hello : ' lLiSA '
-	}
-	var result = await DSON([' ','l']).trimStartAll().doSelect(json)
-	expect(result.hello).toBe('LiSA ')
-})
+// 参数设置为 选择器
+// it('test defaultParams', async()=>{
+// 	var json = {
+// 		hello : ' lLiSA '
+// 	}
+// 	var result = await DSON([' ','l']).trimStartAll().doSelect(json)
+// 	expect(result.hello).toBe('LiSA ')
+// })
 
 //找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA
 
@@ -360,25 +361,37 @@ var testJson = {
 	]
 }
 
-it2('test where / filter     &   test / expect',async ()=>{
-	d().get('data').where(d('job').get().test('>2')).print()
-	d().get('data').where(d('job').get().test(JVD().gt(2))).print()
-	d().get('data').where(d('job').get().count().test(JVD().gt(2))).print()
-	d('data').get().where((data,context)=>{ return data.job.length > 2}).print()
-	d('data').get().where({job:'>2'}).print()
-
-	//寻找已婚美女的名字
-	
-	d('data').where(JVD().$(d('profile.height').expect('?(155,175)').$(d('profile.height').expect('?(45,57.5')).or().$(d('profile.nice').test('>95')))).find('name').print()
-	d('data').where(JVD().$({
-		profile:{
-			height : '?(155,175)',
-			weight: '?(45,57.5)'
-		}
-	}.or().$({
-		profile: { nice : ">95"}
-	}))).find('name').print()
+it('test selector', async()=>{
+	var json = {
+		hi : 'good day',
+		num : [1,2,3]
+	}
+	expect(await d('hi').doDraw(json)).toBe('good day')
+	expect(await d('num[1]').doDraw(json)).toBe(2)
 })
+
+it('test test/expect' , async()=>{
+
+})
+
+// it2('test where / filter     &   test / expect',async ()=>{
+// 	d().get('data').where(d('job').get().test('>2')).print()
+// 	d().get('data').where(d('job').get().test(JVD().gt(2))).print()
+// 	d().get('data').where(d('job').get().count().test(JVD().gt(2))).print()
+// 	d('data').get().where((data,context)=>{ return data.job.length > 2}).print()
+// 	d('data').get().where({job:'>2'}).print()
+
+// 	//寻找美女的名字
+// 	d('data').where(JVD().$(d('profile.height').expect('?(155,175)').$(d('profile.height').expect('?(45,57.5')).or().$(d('profile.nice').test('>95')))).find('name').print()
+// 	d('data').where(JVD().$({
+// 		profile:{
+// 			height : '?(155,175)',
+// 			weight: '?(45,57.5)'
+// 		}
+// 	}.or().$({
+// 		profile: { nice : ">95"}
+// 	}))).find('name').print()
+// })
 
 it('test format', async()=>{
 

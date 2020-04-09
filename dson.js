@@ -55,9 +55,14 @@ function DSON() {
             history: [],
             position: []
         }
+        //selector
+        if(_this.selector && _this._implements['select']){
+            await Promise.resolve(_this._implements['select'].apply(_this, [context,_this.selector]))
+            context.root = context.currentData
+        }
         for (var index = 0; index < _this._queue.length; index++) {
             var current = _this._queue[index]
-            var pureParams = current.params.length>0 ? current.params : (_this.defaultParams || [])
+            var pureParams = current.params.length>0 ? current.params : ([]) //this.defaultParams  
             var params = [context].concat(pureParams)
             await Promise.resolve(_this._implements[current.item].apply(_this, params))
             if (current.item != 'mark') {

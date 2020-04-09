@@ -5,13 +5,7 @@ const sxg = require('./sxg')
 const LJ = require('lustjson.js')
 
 
-exports.get = exports.fetch = (context, expression) => {
-    if (expression && context.currentData) {
-        if (utils.Type.isObject(context.currentData) || utils.Type.isArray(context.currentData)) {
-            context.currentData = context.tempData = ljson(context.currentData).get(expression)
-        }
-    }
-}
+
 
 exports.mark = (context, name) => {
     if (name) {
@@ -329,9 +323,19 @@ exports.format = () => {
     // format json
 }
 
-exports.select = exports.draw = exports.extract
+exports.get = exports.fetch = (context, expression) => {
+    if (expression && context.currentData) {
+        if (utils.Type.isObject(context.currentData) || utils.Type.isArray(context.currentData)) {
+            context.currentData = context.tempData = ljson(context.currentData).get(expression)
+        }
+    }
+}
 
-exports.test = exports.expect
+exports.select = exports.draw = exports.extract = exports.get
+
+exports.test = exports.expect = (context, expressionOrJVD)=>{
+    
+}
 
 exports.print = (context, expression)=>{}
 

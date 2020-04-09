@@ -1,12 +1,15 @@
 const DSON = require('./dson')
 const impls = require('./implements')
+const JVD = require('jvd.js')
 
-module.exports = (...defaultParams) => {
+exports.DSON = (selector) => {
     var d=new DSON()
     for (key in impls) {
         d.reg(key, impls[key])
     }
-    d.defaultParams = defaultParams
+    d.selector = selector
     //traslator.translate(j,expression) 
     return d
 }
+
+exports.JVD = JVD

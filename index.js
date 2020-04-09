@@ -12,4 +12,17 @@ exports.DSON = (selector) => {
     return d
 }
 
-exports.JVD = JVD
+var $ = async (data,options,expressionOrJVD) =>{
+    if(data == null || data ==undefined){
+        return null
+    }
+    if(expressionOrJVD == null || expressionOrJVD == undefined){
+        return null
+    }
+    return await exports.DSON().expect(expressionOrJVD).doTest(data,options)
+}
+
+exports.JVD = (expression) =>{
+    var j = JVD(expression)
+    j.reg('$', $)
+} 

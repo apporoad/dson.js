@@ -333,8 +333,21 @@ exports.get = exports.fetch = (context, expression) => {
 
 exports.select = exports.draw = exports.extract = exports.get
 
-exports.test = exports.expect = (context, expressionOrJVD)=>{
-    
+exports.test = exports.expect = async (context, expressionOrJVD)=>{
+    if(expressionOrJVD){
+        //expression情况
+        if(uType.isString(expressionOrJVD)){
+            
+        }else if(uType.isObject(expressionOrJVD)){
+            if(uType.isFunction(expressionOrJVD.isJVD) && expressionOrJVD.isJVD()){
+
+            }else if(uType.isFunction(expressionOrJVD.isDSON) && expressionOrJVD.isDSON()){
+
+            }else{
+                //模板情况
+            }
+        }
+    }
 }
 
 exports.print = (context, expression)=>{}

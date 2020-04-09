@@ -1,4 +1,5 @@
 const utils = require('lisa.utils')
+const uType = utils.Type
 
 function DSON() {
     _this = this
@@ -45,7 +46,7 @@ function DSON() {
     /**
      *  执行dson
      */
-    this.do = this.run = this.go = async (data) => {
+    this.do = this.run = this.go = async (data,options) => {
         var context = {
             root: data,
             currentData: data, //当前位置对应的数据
@@ -54,6 +55,12 @@ function DSON() {
             autoMarks: {},
             history: [],
             position: []
+        }
+        //串上下文情况 ,只有mark autoMarks history进行传递
+        if(options && uType.isObject(options.context)){
+            context.marks = options.context.marks || {}
+            context.autoMarks = options.context.autoMarks || {}
+            context.history = options.context.history || []
         }
         //selector
         if(_this.selector && _this._implements['select']){
@@ -83,8 +90,8 @@ function DSON() {
 
         return context
     }
-    this.doTest = () => {
-
+    this.doTest = async (data, options) => {
+        //todo
     }
     return this
 }

@@ -15,7 +15,6 @@ d().test({
     dsonExample : d().test('>2'),
     jvdExample : jvd().$({age : '>60'}).or().$({ age : '<20'})
 })
-d().test()
 
 
 

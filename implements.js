@@ -3,6 +3,7 @@ const uType = utils.Type
 const ljson = require('lisa.json')
 const sxg = require('./sxg')
 const LJ = require('lustjson.js')
+const JVD = require('./index').JVD
 
 
 
@@ -337,14 +338,15 @@ exports.test = exports.expect = async (context, expressionOrJVD)=>{
     if(expressionOrJVD){
         //expression情况
         if(uType.isString(expressionOrJVD)){
-            
+            context.test.push(await JVD(expressionOrJVD).test(context.tempData))
         }else if(uType.isObject(expressionOrJVD)){
             if(uType.isFunction(expressionOrJVD.isJVD) && expressionOrJVD.isJVD()){
-
+                context.test.push(await expressionOrJVD.test(context.tempData))
             }else if(uType.isFunction(expressionOrJVD.isDSON) && expressionOrJVD.isDSON()){
-
+                context.test.push( await expressionOrJVD.doTest(context.tempData,context.options))
             }else{
                 //模板情况
+                
             }
         }
     }

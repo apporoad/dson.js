@@ -54,13 +54,15 @@ function DSON() {
             marks: {},
             autoMarks: {},
             history: [],
-            position: []
+            position: [],
+            test : []
         }
         //串上下文情况 ,只有mark autoMarks history进行传递
         if(options && uType.isObject(options.context)){
             context.marks = options.context.marks || {}
             context.autoMarks = options.context.autoMarks || {}
             context.history = options.context.history || []
+            context.test = options.context.test || []
         }
         //selector
         if(_this.selector && _this._implements['select']){

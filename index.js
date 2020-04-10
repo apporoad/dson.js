@@ -20,7 +20,8 @@ var $ = async (data,options,expressionOrJVD) =>{
     if(expressionOrJVD == null || expressionOrJVD == undefined){
         return null
     }
-    return await exports.DSON().expect(expressionOrJVD).doTest(data,options)
+    var r = await exports.DSON().expect(expressionOrJVD).doTest(data,options)
+    return r
 }
 
 exports.JVD = (expression) =>{

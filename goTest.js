@@ -4,7 +4,8 @@ it = (title, fn) => {
   // if (fn)
   //   fn()
 }
-expect = () => {
+expect = (result) => {
+  console.log(result)
   return {
     toBe: () => { },
     toBeTruthy: () => { }

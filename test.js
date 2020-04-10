@@ -371,7 +371,18 @@ it('test selector', async()=>{
 	
 })
 
-it2('test test/expect' , async()=>{
+it2('test $', async()=>{
+	var json = {
+		hi : 'good day',
+		num : [1,2,3]
+	}
+	//todo test $
+	//var jvd = JVD()
+	//var r = await JVD().$('>4').or().$(JVD().gt(2)).test(json.num)
+	expect(await d('num').test(JVD().$('>4').or().$(JVD().gt(2))).doTest(json)).toBe(true)
+})
+
+it('test test/expect' , async()=>{
 	var json = {
 		hi : 'good day',
 		num : [1,2,3]
@@ -381,10 +392,14 @@ it2('test test/expect' , async()=>{
 	expect(await d('num').test(JVD('<4')).doTest(json)).toBe(true)
 	expect(await d('num').test(JVD().gt(5).or().lt(4)).doTest(json)).toBe(true)
 	//todo test $
+	expect(await d('num').test(JVD().$('>4').or().$(JVD().gt(2))).doTest(json)).toBe(true)
 
 	expect(await d('num').test(DSON('num').test('>2').get('[1]').test('=2')).doTest(json)).toBe(true)
 	//var result = await DSON().test('>2').get('[1]').print().test('?=1').doTest(json.num)
 	expect(await d('num').test(DSON().test('>2').get('[1]').print().test('?=1')).doTest(json)).toBe(false)
+	//嵌套
+	expect(await d('num').test(DSON().test(DSON('[2]').test('=1'))).doTest(json)).toBe(false)
+
 })
 
 // it2('test where / filter     &   test / expect',async ()=>{

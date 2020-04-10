@@ -63,7 +63,8 @@ function DSON() {
             context.marks = options.context.marks || {}
             context.autoMarks = options.context.autoMarks || {}
             context.history = options.context.history || []
-            context.test = options.context.test || []
+            //test 不传递
+            //context.test = options.context.test || []
             context.JVD = options.context.JVD
         }
         //selector

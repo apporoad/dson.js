@@ -11,9 +11,20 @@ exports.prelude = options=>{}
  * 判断数据中的字符串是否是Lust
  */
 exports.isLustForString = (str,options,innerLJ) =>{ 
+    //这里处理字符串处理
     options.cache = options.cache || []
     if(options && options.stringHandler && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree) ){
         options.cache.push(innerLJ.LJ.dotTree)
+        return true
+    }
+    //for test handler 测试模板情况
+    if(str && options.jvd
+        && options 
+        && options.testStringHandler 
+        && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree)){
+        options.cache.push(innerLJ.LJ.dotTree)
+        //todo 判断是否是jvd string
+        options.jvd.$(str)
         return true
     }
     return false 

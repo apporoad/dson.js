@@ -12,6 +12,7 @@ d().test('jvdExpression') // like  >2
 d().test(d().test())
 // 嵌套支持
 d().test({
+    strinExample : '!!&?>1',
     dsonExample : d().test('>2'),
     jvdExample : jvd().$({age : '>60'}).or().$({ age : '<20'})
 })

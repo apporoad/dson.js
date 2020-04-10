@@ -3,9 +3,6 @@ const uType = utils.Type
 const ljson = require('lisa.json')
 const sxg = require('./sxg')
 const LJ = require('lustjson.js')
-const JVD = require('./index').JVD
-
-
 
 
 exports.mark = (context, name) => {
@@ -334,25 +331,30 @@ exports.get = exports.fetch = (context, expression) => {
 
 exports.select = exports.draw = exports.extract = exports.get
 
-exports.test = exports.expect = async (context, expressionOrJVD)=>{
+exports.test = exports.expect = async (context, expressionOrJVD,info)=>{
     if(expressionOrJVD){
         //expression情况
         if(uType.isString(expressionOrJVD)){
-            context.test.push(await JVD(expressionOrJVD).test(context.tempData))
+            var JVD = context.JVD
+            var result = await JVD(expressionOrJVD).test(context.tempData)
+            context.test.push(result)
         }else if(uType.isObject(expressionOrJVD)){
             if(uType.isFunction(expressionOrJVD.isJVD) && expressionOrJVD.isJVD()){
-                context.test.push(await expressionOrJVD.test(context.tempData))
+                var result = await expressionOrJVD.test(context.tempData,{context : context})
+                context.test.push(result)
             }else if(uType.isFunction(expressionOrJVD.isDSON) && expressionOrJVD.isDSON()){
                 context.test.push( await expressionOrJVD.doTest(context.tempData,context.options))
             }else{
                 //模板情况
-                
+                //todo
             }
         }
     }
 }
 
-exports.print = (context, expression)=>{}
+exports.print = (context, expression)=>{
+    console.log(context.tempData)
+}
 
 exports.push = ()=>{}
 exports.pop

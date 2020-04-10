@@ -2,7 +2,7 @@ const utils = require('lisa.utils')
 const uType = utils.Type
 
 function DSON() {
-    _this = this
+    var _this = this
     this._implements = {}
     this._queue = []
     this.reg = (itemName, implement) => {
@@ -14,7 +14,7 @@ function DSON() {
                 case 'add':
                 case 'run':
                 case 'go':
-                case 'draw':
+                case 'doDraw':
                     console.log('DSON key string cannot be reged : ' + itemName)
                     return
                 default:
@@ -55,7 +55,8 @@ function DSON() {
             autoMarks: {},
             history: [],
             position: [],
-            test : []
+            test : [],
+            JVD : _this.JVD
         }
         //串上下文情况 ,只有mark autoMarks history进行传递
         if(options && uType.isObject(options.context)){
@@ -63,6 +64,7 @@ function DSON() {
             context.autoMarks = options.context.autoMarks || {}
             context.history = options.context.history || []
             context.test = options.context.test || []
+            context.JVD = options.context.JVD
         }
         //selector
         if(_this.selector && _this._implements['select']){
@@ -93,7 +95,15 @@ function DSON() {
         return context
     }
     this.doTest = async (data, options) => {
-        //todo
+        var c = await _this.do(data,options)
+        var result = true
+        for(var i =0;i<c.test.length;i++){
+            if(!c.test[i]){
+                result = false
+                break
+            }
+        }
+        return result
     }
     return this
 }

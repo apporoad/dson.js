@@ -19,3 +19,5 @@ it2 = (title,fn)=>{
 
 global.debug = global.debug || it2
 require('./test')
+
+require('./utils.test')

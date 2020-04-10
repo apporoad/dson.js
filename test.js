@@ -374,12 +374,37 @@ it('test selector', async()=>{
 it2('test $', async()=>{
 	var json = {
 		hi : 'good day',
-		num : [1,2,3]
+		num : [1,2,3],
+		array : [
+			{ name : 'LiSA', age : 23 },
+			{ name : 'lily', age : 18 },
+			{ name : 'link', age : 33 }
+		]
 	}
 	//todo test $
 	//var jvd = JVD()
 	//var r = await JVD().$('>4').or().$(JVD().gt(2)).test(json.num)
 	expect(await d('num').test(JVD().$('>4').or().$(JVD().gt(2))).doTest(json)).toBe(true)
+
+	expect(await d().test({
+		hi : {
+			isJVD : ()=>{return true},
+			test : ()=>{ return true},
+			hi : '!!&&>2'
+		},
+		num : '>2'
+	}).doTest(json)).toBe(true)
+
+	//todo test.....
+
+	// expect(await d().test({
+	// 	hi : {
+	// 		isJVD : ()=>{return true},
+	// 		test : ()=>{ return true},
+	// 		hi : '!!&&>2'
+	// 	},
+	// 	num : '>2'
+	// }).doTest(json)).toBe(true)
 })
 
 it('test test/expect' , async()=>{

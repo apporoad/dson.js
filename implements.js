@@ -331,34 +331,42 @@ exports.get = exports.fetch = (context, expression) => {
 
 exports.select = exports.draw = exports.extract = exports.get
 
-exports.test = exports.expect = async (context, expressionOrJVD,info)=>{
-    if(expressionOrJVD){
+exports.test = exports.expect = async (context, expressionOrJVDOrTemplate, info) => {
+    var expressionOrJVD =  expressionOrJVDOrTemplate
+    if (expressionOrJVD) {
         //expression情况
-        if(uType.isString(expressionOrJVD)){
+        if (uType.isString(expressionOrJVD)) {
             var JVD = context.JVD
             var result = await JVD(expressionOrJVD).test(context.tempData)
             context.test.push(result)
-        }else if(uType.isObject(expressionOrJVD)){
-            if(uType.isFunction(expressionOrJVD.isJVD) && expressionOrJVD.isJVD()){
-                var result = await expressionOrJVD.test(context.tempData,{context : context})
+        } else if (uType.isObject(expressionOrJVD)) {
+            if (uType.isFunction(expressionOrJVD.isJVD) && expressionOrJVD.isJVD()) {
+                var result = await expressionOrJVD.test(context.tempData, { context: context })
                 context.test.push(result)
-            }else if(uType.isFunction(expressionOrJVD.isDSON) && expressionOrJVD.isDSON()){
-                context.test.push( await expressionOrJVD.doTest(context.tempData,context.options))
-            }else{
+            } else if (uType.isFunction(expressionOrJVD.isDSON) && expressionOrJVD.isDSON()) {
+                context.test.push(await expressionOrJVD.doTest(context.tempData, context.options))
+            } else {
                 //模板情况
-                //todo
+                var options = {
+                    jvd :  context.JVD(),
+                    JVD : context.JVD,
+                    test : [],
+                    data : context.tempData
+                }
+                await LJ.get( expressionOrJVD, sxg, options)
+                context.test = context.test.concat(options.test)
             }
         }
     }
 }
 
-exports.print = (context, expression)=>{
+exports.print = (context, expression) => {
     console.log(context.tempData)
 }
 
-exports.push = ()=>{}
+exports.push = () => { }
 exports.pop
 
-exports.each = exports.forEach 
+exports.each = exports.forEach
 
 exports.sequence 

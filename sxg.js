@@ -1,85 +1,123 @@
 
 const utils = require('lisa.utils')
+const lutils = require('./utils')
+const ljson = require('lisa.json')
+
+var check = async (jvd, dotTree,template, checkData )=>{
+    var test = []
+    if(lutils.isArrayUnique(dotTree,template)){
+        var newDotTree = dotTree.replace(/\[0+\]/g,'[]')
+        var checkNodes = ljson(checkNode).get(newDotTree)
+        for(var i =0;i< checkNodes.length;i++){
+            test.push(await jvd.test(checkNodes[i]))
+        }
+    }else{
+        var checkNode = ljson(checkData).get(dotTree)
+        test.push(await jvd.test(checkNode))   
+    }
+}
+
 /**
  * here is the start
  * 故事开始的地方
  */
-exports.prelude = options=>{}
+exports.prelude = options => { }
 
 /**
  * is the string in Array a lust, example :   [ 'abc','???' ]
  * 判断数据中的字符串是否是Lust
  */
-exports.isLustForString = (str,options,innerLJ) =>{ 
+exports.isLustForString = async (str, options, innerLJ) => {
     //这里处理字符串处理
     options.cache = options.cache || []
-    if(options && options.stringHandler && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree) ){
+    if (options && options.stringHandler && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
         options.cache.push(innerLJ.LJ.dotTree)
         return true
     }
     //for test handler 测试模板情况
-    if(str && options.jvd
-        && options 
-        && options.testStringHandler 
-        && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree)){
+    if (str && options && options.jvd
+        && options.JVD
+        && options.data
+        && options.test
+        && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
         options.cache.push(innerLJ.LJ.dotTree)
-        //todo 判断是否是jvd string
-        options.jvd.$(str)
-        return true
+        //判断是否是jvd string
+        var jvd = options.JVD(str)
+        if (jvd.transInfo.fail == 0 && jvd.transInfo.success > 0) {
+            var test = await check(jvd,innerLJ.LJ.dotTree,innerLJ.LJ.object, options.data)
+            options.test = options.test.concat(test)
+        }
+        //todo 转化错误提示
     }
-    return false 
+    return false
 }
 
 /**
  * get lustInfo from String when isLustForString is true
  * 获取lust from String
  */
-exports.getLustForString = async (str,options, innerLJ) =>{
+exports.getLustForString = async (str, options, innerLJ) => {
     var params = [str].concat(options.params || [])
-    return  await Promise.resolve( options.stringHandler.apply(this,params)) 
+    return await Promise.resolve(options.stringHandler.apply(this, params))
 }
 
 /**
  * is the Object in Arry a lust  ,example : [{ isLust: true, hello: ' world'}]
  * 判断数组中对象是否是Lust
  */
-exports.isLustForObject = (obj,options,innerLJ) =>{ 
+exports.isLustForObject = (obj, options, innerLJ) => {
     options.cache = options.cache || []
-    if(options && options.othersHandler && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree) ){
+    if (options && options.othersHandler && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
         options.cache.push(innerLJ.LJ.dotTree)
         return true
     }
-    return false 
+    //for test handler 测试模板情况
+    if (obj && options && options.jvd
+        && options.JVD
+        && options.data
+        && options.test
+        && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
+        options.cache.push(innerLJ.LJ.dotTree)
+        //判断是否是jvd 
+        if (obj.isJVD && obj.isJVD()) {
+            return true
+        }
+        //todo 转化错误提示
+    }
+    return false
 }
 
 /**
  * get lustInfo from Object when isLustForObject is true
  * 获取lust from Object
  */
-exports.getLustForObject =async (obj,options,innerLJ)=>{ 
-    var params = [obj].concat(options.params || [])
-    return  await Promise.resolve( options.othersHandler.apply(this,params)) 
- } 
+exports.getLustForObject = async (obj, options, innerLJ) => {
+    if (options && options.othersHandler) {
+        var params = [obj].concat(options.params || [])
+        return await Promise.resolve(options.othersHandler.apply(this, params))
+    }
+    return null
+}
 
 /**
  * is the node of json  a lust , example : { '???':{ 'hello': 'world'}}
  * 判断json中的节点是否是lust
  */
-exports.isLustForKV = (k,v,options)=>{ return false }
+exports.isLustForKV = (k, v, options) => { return false }
 
 /**
  * get lustInfo from node of json when isLustForKV is true
  * 获取lust 
  */
-exports.getLustForKV = (k,v,options,innerLJ) => { return {}}
+exports.getLustForKV = (k, v, options, innerLJ) => { return {} }
 
 /**
  * is the node of other  a lust , example :  ()=>{}
  * 判断json中的节点是否是lust
  */
-exports.isLustForOthers= (obj,options,innerLJ)=>{ 
+exports.isLustForOthers = (obj, options, innerLJ) => {
     options.cache = options.cache || []
-    if(options && options.othersHandler && !utils.ArrayContains(options.cache,innerLJ.LJ.dotTree) ){
+    if (options && options.othersHandler && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
         options.cache.push(innerLJ.LJ.dotTree)
         return true
     }
@@ -90,28 +128,28 @@ exports.isLustForOthers= (obj,options,innerLJ)=>{
  * get lustInfo from node of json when isLustForOthers is true
  * 获取lust 
  */
-exports.getLustForOthers= async (obj,options,innerLJ) => { 
+exports.getLustForOthers = async (obj, options, innerLJ) => {
     var params = [obj].concat(options.params || [])
-    return  await Promise.resolve( options.othersHandler.apply(this,params)) 
+    return await Promise.resolve(options.othersHandler.apply(this, params))
 }
 
 
 /**
  * 满足一个lust节点前触发行为 
  */
-exports.beforeSatifyOneLust = (lustInfo,options)=>{}
+exports.beforeSatifyOneLust = (lustInfo, options) => { }
 
 /**
  * 满足一个lust节点后触发行为
  */
-exports.afterSatifyOneLust = (lustInfo,options) =>{}
+exports.afterSatifyOneLust = (lustInfo, options) => { }
 
 /**
  * 满足所有lust之后触发行为
  */
-exports.afterSatifyAllLust = (lustJson,options) =>{
+exports.afterSatifyAllLust = (lustJson, options) => {
     return {
-        isRemakeLustJson : false
+        isRemakeLustJson: false
     }
 }
 
@@ -119,19 +157,19 @@ exports.afterSatifyAllLust = (lustJson,options) =>{
  * sexgirl核心逻辑， 为 一个lust填充值
  * core logic @ sex girl, get real value for a lust
  */
-exports.getInputOneLustValue = (lustInfo,lastData,options) =>{
-    return  lustInfo.value
+exports.getInputOneLustValue = (lustInfo, lastData, options) => {
+    return lustInfo.value
 }
 
 /**
  * getInputOneLustValue后面的方法，校验输入值
  * method after getInputOneLustValue
  */
-exports.validateOneLustInfo = (value,lustInfo,lastData,options) =>{
+exports.validateOneLustInfo = (value, lustInfo, lastData, options) => {
     return {
-            isPass:true,   // important result ,  will reRun when false
-            isKeepLust: false, // nullable, when true , the lust won't be deleted
-            key:  null, // nullable， only you need change your key in json
-            value : value  // important result , your real value against lust
-        }
+        isPass: true,   // important result ,  will reRun when false
+        isKeepLust: false, // nullable, when true , the lust won't be deleted
+        key: null, // nullable， only you need change your key in json
+        value: value  // important result , your real value against lust
+    }
 }

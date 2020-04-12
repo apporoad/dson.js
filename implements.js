@@ -339,21 +339,27 @@ exports.test = exports.expect = async (context, expressionOrJVDOrTemplate, info)
             var JVD = context.JVD
             var result = await JVD(expressionOrJVD).test(context.tempData)
             context.test.push(result)
-        } else if (uType.isObject(expressionOrJVD)) {
+        }
+        else if(uType.isFunction(expressionOrJVD) || uType.isAsyncFunction(expressionOrJVD)){
+            var result = await Promise.resolve(expressionOrJVD(context.tempData,context))
+            context.test.push(result)
+        }
+        else if (uType.isObject(expressionOrJVD)) {
             if (uType.isFunction(expressionOrJVD.isJVD) && expressionOrJVD.isJVD()) {
                 var result = await expressionOrJVD.test(context.tempData, { context: context })
                 context.test.push(result)
             } else if (uType.isFunction(expressionOrJVD.isDSON) && expressionOrJVD.isDSON()) {
-                context.test.push(await expressionOrJVD.doTest(context.tempData, context.options))
+                context.test.push(await expressionOrJVD.doTest(context.tempData, {context : context }))
             } else {
                 //模板情况
                 var options = {
                     jvd :  context.JVD(),
                     JVD : context.JVD,
                     test : [],
-                    data : context.tempData
+                    data : context.tempData,
+                    context : context
                 }
-                await LJ.get( expressionOrJVD, sxg, options)
+                await LJ.get(expressionOrJVD, sxg, options)
                 context.test = context.test.concat(options.test)
             }
         }

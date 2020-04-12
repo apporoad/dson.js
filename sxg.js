@@ -1,20 +1,52 @@
 
 const utils = require('lisa.utils')
+const uType = utils.Type
 const lutils = require('./utils')
 const ljson = require('lisa.json')
 
-var check = async (jvd, dotTree,template, checkData )=>{
+var check = async (jvd, dotTree,template, checkData,context)=>{
     var test = []
     if(lutils.isArrayUnique(dotTree,template)){
         var newDotTree = dotTree.replace(/\[0+\]/g,'[]')
-        var checkNodes = ljson(checkNode).get(newDotTree)
+        var checkNodes = ljson(checkData).get(newDotTree)
         for(var i =0;i< checkNodes.length;i++){
-            test.push(await jvd.test(checkNodes[i]))
+            test.push(await jvd.test(checkNodes[i],{ context: context }))
         }
     }else{
         var checkNode = ljson(checkData).get(dotTree)
-        test.push(await jvd.test(checkNode))   
+        test.push(await jvd.test(checkNode,{ context: context }))   
     }
+    return test
+}
+
+var checkDson = async(dson ,dotTree,template,checkData,context) =>{
+    var test = []
+    if(lutils.isArrayUnique(dotTree,template)){
+        var newDotTree = dotTree.replace(/\[0+\]/g,'[]')
+        var checkNodes = ljson(checkData).get(newDotTree)
+        for(var i =0;i< checkNodes.length;i++){
+            test.push(await dson.doTest(checkNodes[i], {context : context }))
+        }
+    }else{
+        var checkNode = ljson(checkData).get(dotTree)
+        test.push(await dson.doTest(checkNode,{context : context}))   
+    }
+    return test
+}
+
+var checkFunction = async(fn ,dotTree,template,checkData,context) =>{
+    var test = []
+    if(lutils.isArrayUnique(dotTree,template)){
+        var newDotTree = dotTree.replace(/\[0+\]/g,'[]')
+        var checkNodes = ljson(checkData).get(newDotTree)
+        for(var i =0;i< checkNodes.length;i++){
+            test.push(await Promise.resolve(fn(checkNodes[i],context)))
+        }
+    }else{
+        var checkNode = ljson(checkData).get(dotTree)
+        test.push(await Promise.resolve(fn(checkNode,context)))   
+    }
+    return test
 }
 
 /**
@@ -44,8 +76,11 @@ exports.isLustForString = async (str, options, innerLJ) => {
         //判断是否是jvd string
         var jvd = options.JVD(str)
         if (jvd.transInfo.fail == 0 && jvd.transInfo.success > 0) {
-            var test = await check(jvd,innerLJ.LJ.dotTree,innerLJ.LJ.object, options.data)
-            options.test = options.test.concat(test)
+            //todo use root
+            var test = await check(jvd,innerLJ.LJ.dotTree,innerLJ.LJ.root, options.data)
+            test.forEach(t=>{
+                options.test.push(t)
+            })
         }
         //todo 转化错误提示
     }
@@ -65,7 +100,7 @@ exports.getLustForString = async (str, options, innerLJ) => {
  * is the Object in Arry a lust  ,example : [{ isLust: true, hello: ' world'}]
  * 判断数组中对象是否是Lust
  */
-exports.isLustForObject = (obj, options, innerLJ) => {
+exports.isLustForObject =  async (obj, options, innerLJ) => {
     options.cache = options.cache || []
     if (options && options.othersHandler && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
         options.cache.push(innerLJ.LJ.dotTree)
@@ -76,10 +111,21 @@ exports.isLustForObject = (obj, options, innerLJ) => {
         && options.JVD
         && options.data
         && options.test
+        && options.context
         && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
         options.cache.push(innerLJ.LJ.dotTree)
         //判断是否是jvd 
-        if (obj.isJVD && obj.isJVD()) {
+        if (uType.isFunction(obj.isJVD) && obj.isJVD()) {
+            var test = await check(obj,innerLJ.LJ.dotTree,innerLJ.LJ.root, options.data,options.context)
+            test.forEach(t=>{
+                options.test.push(t)
+            })
+            return true
+        }else if(uType.isFunction(obj.isDSON) && obj.isDSON()){
+            var test = await checkDson(obj,innerLJ.LJ.dotTree,innerLJ.LJ.root,options.data,options.context)
+            test.forEach(t=>{
+                options.test.push(t)
+            })
             return true
         }
         //todo 转化错误提示
@@ -96,6 +142,14 @@ exports.getLustForObject = async (obj, options, innerLJ) => {
         var params = [obj].concat(options.params || [])
         return await Promise.resolve(options.othersHandler.apply(this, params))
     }
+    if (obj && options && options.jvd
+        && options.JVD
+        && options.data
+        && options.test){
+            //返回空对象
+            return {}
+    }
+
     return null
 }
 
@@ -115,12 +169,26 @@ exports.getLustForKV = (k, v, options, innerLJ) => { return {} }
  * is the node of other  a lust , example :  ()=>{}
  * 判断json中的节点是否是lust
  */
-exports.isLustForOthers = (obj, options, innerLJ) => {
+exports.isLustForOthers =  async (obj, options, innerLJ) => {
     options.cache = options.cache || []
     if (options && options.othersHandler && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)) {
         options.cache.push(innerLJ.LJ.dotTree)
         return true
     }
+    if (obj && options && options.jvd
+        && options.JVD
+        && options.data
+        && options.test
+        && options.context
+        && !utils.ArrayContains(options.cache, innerLJ.LJ.dotTree)){
+            if(uType.isFunction(obj) || uType.isAsyncFunction(obj)){
+                var test = await checkFunction(obj,innerLJ.LJ.dotTree,innerLJ.LJ.root,options.data,options.context)
+                test.forEach(t=>{
+                    options.test.push(t)
+                })
+            }
+            //todo 提示
+        }
     return false
 }
 

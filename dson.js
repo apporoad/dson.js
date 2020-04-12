@@ -97,11 +97,16 @@ function DSON() {
     }
     this.doTest = async (data, options) => {
         var c = await _this.do(data,options)
-        var result = true
+        var result = null
         for(var i =0;i<c.test.length;i++){
+            if(c.test[i] == null || c.test[i] == undefined){
+                continue
+            }
             if(!c.test[i]){
                 result = false
                 break
+            }else{
+                result = true
             }
         }
         return result

@@ -386,25 +386,94 @@ it2('test $', async()=>{
 	//var r = await JVD().$('>4').or().$(JVD().gt(2)).test(json.num)
 	expect(await d('num').test(JVD().$('>4').or().$(JVD().gt(2))).doTest(json)).toBe(true)
 
-	expect(await d().test({
+	var r1= await d().test({
 		hi : {
 			isJVD : ()=>{return true},
-			test : ()=>{ return true},
+			test : ()=>{ return false},
 			hi : '!!&&>2'
 		},
 		num : '>2'
+	}).doTest(json)
+	expect(r1).toBe(false)
+
+	var r2= await d().test({
+		hi : {
+			isDSON : ()=>{return true},
+			doTest : ()=>{ return true},
+			hi : '!!&&>2'
+		},
+		num : '>2'
+	}).doTest(json)
+	expect(r2).toBe(true)
+
+	expect(await d('hi').test((data)=>{ return data.length > 3}).doTest(json)).toBe(true)
+	expect(await d('hi').test(async (data)=>{return null }).doTest(json)).toBe(null)
+
+	expect(await d().test({
+		hi: (data) => {return data.length > 3},
+		array : (data)=>{ return data.length >2}
+	}).doTest(json)).toBe(true)
+	
+	
+	//递归
+	expect(await d().test({
+		hi: '>3',
+		array : JVD().gt(10).or().$(DSON('[0]').test({ age : '>23'}))
+	}).doTest(json)).toBe(false)
+
+	expect(await d().test({
+		array : [
+			{
+				age : '>18'
+			},{
+				age : '<20'
+			}
+		]
 	}).doTest(json)).toBe(true)
 
-	//todo test.....
+	expect(await d().test({
+		array : [
+			{
+				age : '>18'
+			}
+		]
+	}).doTest(json)).toBe(false)
 
-	// expect(await d().test({
-	// 	hi : {
-	// 		isJVD : ()=>{return true},
-	// 		test : ()=>{ return true},
-	// 		hi : '!!&&>2'
-	// 	},
-	// 	num : '>2'
-	// }).doTest(json)).toBe(true)
+	expect(await d().test({
+		array : [
+			{
+				age : '>18'
+			},{
+				name : DSON().mark('lily'),
+				age : '<20'
+			}
+		]
+	}).goto('lily').test('>4').doTest(json)).toBe(false)
+
+	expect(await d().test({
+		array : [
+			JVD().$((data)=>{ 
+				return data.age > 17
+			})
+		]
+	}).doTest(json)).toBe(true)
+
+	expect(await d().test({
+		array : [
+			JVD().$((data)=>{ 
+				return data.age > 17
+			})
+		]
+	}).doTest(json)).toBe(true)
+
+	expect(await d().test({
+		array : [
+			DSON().test({
+				age : JVD().gt(18)
+			})
+			,{}
+		]
+	}).doTest(json)).toBe(true)
 })
 
 it('test test/expect' , async()=>{
@@ -421,7 +490,7 @@ it('test test/expect' , async()=>{
 
 	expect(await d('num').test(DSON('num').test('>2').get('[1]').test('=2')).doTest(json)).toBe(true)
 	//var result = await DSON().test('>2').get('[1]').print().test('?=1').doTest(json.num)
-	expect(await d('num').test(DSON().test('>2').get('[1]').print().test('?=1')).doTest(json)).toBe(false)
+	expect(await d('num').test(DSON().test('>2').get('[1]').test('?=1')).doTest(json)).toBe(false)
 	//嵌套
 	expect(await d('num').test(DSON().test(DSON('[2]').test('=1'))).doTest(json)).toBe(false)
 

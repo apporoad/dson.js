@@ -310,10 +310,37 @@ exports.substring = (context, start, end) => {
 
 exports.order
 
+var getResult = (results) => {
+    var result = null
+    for (var i = 0; i < results.length; i++) {
+        if (results[i] == null || results[i] == undefined) {
+            continue
+        }
+        if (!results[i]) {
+            result = false
+            break
+        } else {
+            result = true
+        }
+    }
+    return result
+}
 
 //  以下方法为模板操作方法+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-exports.where = exports.filter = (context, jvdOrTemplate) => {
-    //todo
+//where 只对数组起效
+exports.where = exports.filter = async (context, expressionOrDsonOrJvdOrTemplate) => {
+    if (uType.isArray(context.currentData) && expressionOrDsonOrJvdOrTemplate) {
+        var rArray = []
+        for (var i = 0; i < context.currentData.length; i++) {
+            var data = context.currentData[i]
+            var results = await expect(data, context, expressionOrDsonOrJvdOrTemplate, null)
+            var  r = getResult(results)
+            if(r==null || r){
+                rArray.push(data)
+            }
+        }
+        context.currentData = context.tempData = rArray
+    }
 }
 exports.format = () => {
     //todo 
@@ -331,38 +358,51 @@ exports.get = exports.fetch = (context, expression) => {
 
 exports.select = exports.draw = exports.extract = exports.get
 
-exports.test = exports.expect = async (context, expressionOrJVDOrTemplate, info) => {
-    var expressionOrJVD =  expressionOrJVDOrTemplate
+var expect = async (data, context, expressionOrJVDOrTemplate, info) => {
+    var test = []
+    var expressionOrJVD = expressionOrJVDOrTemplate
     if (expressionOrJVD) {
         //expression情况
         if (uType.isString(expressionOrJVD)) {
             var JVD = context.JVD
-            var result = await JVD(expressionOrJVD).test(context.tempData)
-            context.test.push(result)
-        }
-        else if(uType.isFunction(expressionOrJVD) || uType.isAsyncFunction(expressionOrJVD)){
-            var result = await Promise.resolve(expressionOrJVD(context.tempData,context))
-            context.test.push(result)
-        }
-        else if (uType.isObject(expressionOrJVD)) {
+            var result = await JVD(expressionOrJVD).test(data)
+            test.push(result)
+        } else if (uType.isFunction(expressionOrJVD) || uType.isAsyncFunction(expressionOrJVD)) {
+            var result = await Promise.resolve(expressionOrJVD(data, context))
+            test.push(result)
+        } else if (uType.isObject(expressionOrJVD)) {
             if (uType.isFunction(expressionOrJVD.isJVD) && expressionOrJVD.isJVD()) {
-                var result = await expressionOrJVD.test(context.tempData, { context: context })
-                context.test.push(result)
+                var result = await expressionOrJVD.test(data, {
+                    context: context
+                })
+                test.push(result)
             } else if (uType.isFunction(expressionOrJVD.isDSON) && expressionOrJVD.isDSON()) {
-                context.test.push(await expressionOrJVD.doTest(context.tempData, {context : context }))
+                test.push(await expressionOrJVD.doTest(data, {
+                    context: context
+                }))
             } else {
                 //模板情况
                 var options = {
-                    jvd :  context.JVD(),
-                    JVD : context.JVD,
-                    test : [],
-                    data : context.tempData,
-                    context : context
+                    jvd: context.JVD(),
+                    JVD: context.JVD,
+                    test: [],
+                    data: data,
+                    context: context
                 }
                 await LJ.get(expressionOrJVD, sxg, options)
-                context.test = context.test.concat(options.test)
+                test = test.concat(options.test)
             }
         }
+    }
+    return test
+}
+
+exports.test = exports.expect = async (context, expressionOrDsonOrJvdOrTemplate, info) => {
+    var testArray = await expect(context.tempData, context, expressionOrDsonOrJvdOrTemplate, info)
+    if (testArray && testArray.length > 0) {
+        testArray.forEach(t => {
+            context.test.push(t)
+        })
     }
 }
 
@@ -370,9 +410,9 @@ exports.print = (context, expression) => {
     console.log(context.tempData)
 }
 
-exports.push = () => { }
+exports.push = () => {}
 exports.pop
 
 exports.each = exports.forEach
 
-exports.sequence 
+exports.sequence

@@ -361,6 +361,29 @@ var testJson = {
 	]
 }
 
+var testJson2 = {
+	hello: 'good good day',
+	data: [
+		{
+			id: 1,
+			name: 'fade',
+			job: [{
+				name: 'actor',
+				long: 3,
+				remark: 'main job'
+			}, {
+				name: 'singer',
+				long: 1
+			}],
+			profile: {
+				height: 170,
+				weight: 65,
+				nice: 50
+			}
+		}
+	]
+}
+
 it('test selector', async()=>{
 	var json = {
 		hi : 'good day',
@@ -371,7 +394,7 @@ it('test selector', async()=>{
 	
 })
 
-it2('test $', async()=>{
+it('test $', async()=>{
 	var json = {
 		hi : 'good day',
 		num : [1,2,3],
@@ -496,24 +519,28 @@ it('test test/expect' , async()=>{
 
 })
 
-// it2('test where / filter     &   test / expect',async ()=>{
-// 	d().get('data').where(d('job').get().test('>2')).print()
-// 	d().get('data').where(d('job').get().test(JVD().gt(2))).print()
-// 	d().get('data').where(d('job').get().count().test(JVD().gt(2))).print()
-// 	d('data').get().where((data,context)=>{ return data.job.length > 2}).print()
-// 	d('data').get().where({job:'>2'}).print()
+it2('test where / filter     &   test / expect',async ()=>{
 
-// 	//寻找美女的名字
-// 	d('data').where(JVD().$(d('profile.height').expect('?(155,175)').$(d('profile.height').expect('?(45,57.5')).or().$(d('profile.nice').test('>95')))).find('name').print()
-// 	d('data').where(JVD().$({
-// 		profile:{
-// 			height : '?(155,175)',
-// 			weight: '?(45,57.5)'
-// 		}
-// 	}.or().$({
-// 		profile: { nice : ">95"}
-// 	}))).find('name').print()
-// })
+	expect(await d().get('data').where(d('job').get().test('>1')).test('>4').test('<6').doTest(testJson)).toBeTruthy()
+
+	expect((await d().get('data').where(d('job').get().test(JVD().gt(1))).doDraw(testJson)).length).toBe(5)
+	
+	expect((await d().get('data').where(d('job').get().count().test(JVD().gt(1))).doDraw(testJson)).length).toBe(5)
+	
+	expect((await d('data').get().where((data,context)=>{ return data.job.length > 1}).doDraw(testJson)).length).toBe(5)
+
+	//寻找美女的名字
+	expect((await d('data').where(JVD().$(d('profile.nice').test('>95')).or()
+	.$(d('profile.height').expect('?(164,170)')).$(d('profile.weight').expect('?(45,55)'))).print().doDraw(testJson)).length).toBe(3)
+	// d('data').where(JVD().$({
+	// 	profile:{
+	// 		height : '?(155,175)',
+	// 		weight: '?(45,57.5)'
+	// 	}
+	// }).or().$({
+	// 	profile: { nice : ">95"}
+	// })).find('name').print()
+})
 
 it('test format', async()=>{
 

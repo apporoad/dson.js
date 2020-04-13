@@ -5,7 +5,7 @@ it = (title, fn) => {
   //   fn()
 }
 expect = (result) => {
-  console.log(result)
+  //console.log(result)
   return {
     toBe: () => { },
     toBeTruthy: () => { }

@@ -22,7 +22,7 @@
   "homepage": "https://github.com/apporoad/dson.js#readme",
   "dependencies": {
     "jest": "^25.2.4",
-    "jvd.js": "^1.2.0",
+    "jvd.js": "^1.2.1",
     "lisa.json": "^1.3.0",
     "lisa.utils": "^1.3.1",
     "lustjson.js": "^2.2.0"

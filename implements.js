@@ -348,12 +348,13 @@ exports.format = () => {
     // format json
 }
 
-exports.get = exports.fetch = (context, expression) => {
-    if (expression && context.currentData) {
+exports.get = exports.fetch = (context, expression,replacementJson) => {
+    if (uType.isString(expression) && context.currentData) {
         if (utils.Type.isObject(context.currentData) || utils.Type.isArray(context.currentData)) {
             context.currentData = context.tempData = ljson(context.currentData).get(expression)
         }
     }
+    //todo
 }
 
 exports.select = exports.draw = exports.extract = exports.get

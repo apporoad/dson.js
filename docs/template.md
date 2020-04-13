@@ -39,7 +39,36 @@ d().select({
     newKey : 'hello'
 })
 
+d({
+    key0 : '$',
+    'key0.1' : DM(),
+    'key0.2' : {
+        'key0.3' : '$',
+        'key0.2' : '$value0.2'
+    },
+    key1 : DSON().get({
+        hello : 'real good days'
+    }),
+    $key2 : 'hello 2',
+    '${key3}' : 'hello 3',
+    key4 : '$value4',
+    key5 : '$value5.name',
+    key6 : '${value6}',
+    key7 : 'abc ${value7.name} zzz',
+    key8 : '${mark8}',
+    key9 : '${autoMark9}',
+    key10 : (autoMatchData,rootData,context)=>{ return '$value11'},
+    key11 : async (autoMatchData,rootData,context)=>{ return ['cde']},
+})
+
+
+d([{
+        name : '$',
+        age : '$'
+    }])
+
 // where
+//just like test
 
 ```
 

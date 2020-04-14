@@ -57,8 +57,8 @@ d({
     key7 : 'abc ${value7.name} zzz',
     key8 : '${mark8}',
     key9 : '${autoMark9}',
-    key10 : (autoMatchData,rootData,context)=>{ return '$value11'},
-    key11 : async (autoMatchData,rootData,context)=>{ return ['cde']},
+    key10 : d((data,context)=>{ return '$value11'}),
+    key11 : d(async (data,context)=>{ return ['cde']}),
 })
 
 

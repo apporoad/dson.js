@@ -334,8 +334,8 @@ exports.where = exports.filter = async (context, expressionOrDsonOrJvdOrTemplate
         for (var i = 0; i < context.currentData.length; i++) {
             var data = context.currentData[i]
             var results = await expect(data, context, expressionOrDsonOrJvdOrTemplate, null)
-            var  r = getResult(results)
-            if(r==null || r){
+            var r = getResult(results)
+            if (r == null || r) {
                 rArray.push(data)
             }
         }
@@ -348,13 +348,34 @@ exports.format = () => {
     // format json
 }
 
-exports.get = exports.fetch = (context, expression,replacementJson) => {
-    if (uType.isString(expression) && context.currentData) {
-        if (utils.Type.isObject(context.currentData) || utils.Type.isArray(context.currentData)) {
-            context.currentData = context.tempData = ljson(context.currentData).get(expression)
+var innerGetFromTemplateOrDSON = async (expression, data, context, replacementJson) => {
+    if (uType.isString(expression) && data) {
+        if (utils.Type.isObject(data) || utils.Type.isArray(data)) {
+            return ljson(data).get(expression)
         }
     }
-    //todo
+    if (uType.isFunction(expression) || uType.isAsyncFunction(expression)) {
+        var result = await Promise.resolve(expression(data, context))
+        return result
+    }
+    if (uType.isObject(expression)) {
+        if (uType.isFunction(expression.isDSON) && expression.isDSON()) {
+            return await expression.doDraw(data, {
+                context: context
+            })
+        } else {
+            //模板情况
+
+        }
+    }
+    return null
+}
+exports.get = exports.fetch = (context, expression, replacementJson) => {
+    if (uType.isArray(expression)) {
+        //todo
+    } else {
+        context.currentData = context.tempData = await innerGetFromTemplateOrDSON(expression, context.currentData, context, replacementJson)
+    }
 }
 
 exports.select = exports.draw = exports.extract = exports.get

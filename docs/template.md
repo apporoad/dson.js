@@ -67,6 +67,11 @@ d([{
         age : '$'
     }])
 
+d(DSON())
+
+d((data,context)=>{ return 'abc'})
+d(async (data,context)=>{ return 'abc'})
+
 // where
 //just like test
 

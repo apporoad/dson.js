@@ -370,11 +370,13 @@ var innerGetFromTemplateOrDSON = async (expression, data, context, replacementJs
     }
     return null
 }
-exports.get = exports.fetch = (context, expression, replacementJson) => {
+exports.get = exports.fetch = async (context, expression, replacementJson) => {
     if (uType.isArray(expression)) {
         //todo
     } else {
-        context.currentData = context.tempData = await innerGetFromTemplateOrDSON(expression, context.currentData, context, replacementJson)
+        var value = await innerGetFromTemplateOrDSON(expression, context.currentData, context, replacementJson)
+        if(value)
+            context.currentData = context.tempData =value
     }
 }
 

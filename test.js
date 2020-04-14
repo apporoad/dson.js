@@ -498,15 +498,10 @@ it('test test/expect' , async()=>{
 })
 
 it('test where / filter     &   test / expect',async ()=>{
-
 	expect(await d().get('data').where(d('job').get().test('>1')).test('>4').test('<6').doTest(testJson)).toBeTruthy()
-
 	expect((await d().get('data').where(d('job').get().test(JVD().gt(1))).doDraw(testJson)).length).toBe(5)
-	
 	expect((await d().get('data').where(d('job').get().count().test(JVD().gt(1))).doDraw(testJson)).length).toBe(5)
-	
 	expect((await d('data').get().where((data,context)=>{ return data.job.length > 1}).doDraw(testJson)).length).toBe(5)
-
 	//寻找美女的名字
 	expect((await d('data').where(JVD().$(d('profile.nice').test('>95')).or()
 	.$(d('profile.height').expect('?(164,170)')).$(d('profile.weight').expect('?(45,55)'))).doDraw(testJson)).length).toBe(3)
@@ -521,13 +516,8 @@ it('test where / filter     &   test / expect',async ()=>{
 	})).get('[].name').doDraw(testJson)).length).toBe(3)
 })
 
-it('test format', async()=>{
-
-})
-
-
-it('test get/fetch/select/draw/extract', async ()=>{
-
+it('test get/fetch/select/draw/extract/format', async ()=>{
+	//todo
 })
 
 // DSON().get('data').count().mark('dataCount').each()

@@ -2,6 +2,7 @@ const utils = require('lisa.utils')
 const uType = utils.Type
 const ljson = require('lisa.json')
 const sxg = require('./sxg')
+const sxgGet = require('./sxgGet')
 const LJ = require('lustjson.js')
 
 
@@ -342,11 +343,7 @@ exports.where = exports.filter = async (context, expressionOrDsonOrJvdOrTemplate
         context.currentData = context.tempData = rArray
     }
 }
-exports.format = () => {
-    //todo 
 
-    // format json
-}
 
 var innerGetFromTemplateOrDSON = async (expression, data, context, replacementJson) => {
     if (uType.isString(expression) && data) {
@@ -365,14 +362,26 @@ var innerGetFromTemplateOrDSON = async (expression, data, context, replacementJs
             })
         } else {
             //模板情况
-
+            var options = {
+                data: data,
+                context : context,
+                replacement : Object.assign({}, context.defaultReplacementJson || {}, 
+                    context.autoMarks || {}, context.marks || {},
+                    replacementJson)
+            }
+            var result = await LJ.get(expression,sxgGet,options)
+            return result
         }
     }
     return null
 }
 exports.get = exports.fetch = async (context, expression, replacementJson) => {
-    if (uType.isArray(expression)) {
-        //todo
+    if (uType.isArray(expression) && expression.length==0 && uType.isArray(context.currentData)) {
+        var rs = []
+        for(var i =0 ;i<context.currentData.length;i++){
+            rs.push(await innerGetFromTemplateOrDSON(expression[0], context.currentData[i], context, replacementJson))
+        }
+        context.currentData = context.tempData = rs
     } else {
         var value = await innerGetFromTemplateOrDSON(expression, context.currentData, context, replacementJson)
         if(value)
@@ -381,6 +390,7 @@ exports.get = exports.fetch = async (context, expression, replacementJson) => {
 }
 
 exports.select = exports.draw = exports.extract = exports.get
+exports.format = exports.select
 
 var expect = async (data, context, expressionOrJVDOrTemplate, info) => {
     var test = []

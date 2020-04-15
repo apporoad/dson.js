@@ -1,4 +1,3 @@
-
 const d = D = DSON = require('./index').DSON
 const LJ = require('lustjson.js')
 const sxg = require('./sxg')
@@ -81,14 +80,18 @@ it('test basic', async () => {
 	var testRoot = (await DSON().get('data[0]').root().find('updateUser').mark('users').do(json)).marks
 	expect(testRoot.users.length).toBe(3)
 
-	var selectFn = j => { return j.changeTimes }
+	var selectFn = j => {
+		return j.changeTimes
+	}
 	var all = await DSON().find('updateUser').count().mark('count')
 		.first().mark('first')
 		.root().get('data').last().mark('last')
 		.root().find('updateUser').last(2).mark('last2')
 		.root().find('updateUser').top(2).mark('top2')
 		.root().find('updateUser').random(2).mark('random2')
-		.root().find('data').first().distinct((a, b) => { return a.updateUser == b.updateUser }).mark('distinct')
+		.root().find('data').first().distinct((a, b) => {
+			return a.updateUser == b.updateUser
+		}).mark('distinct')
 		.root().find('changeTimes')
 		.sum().mark('sum1')
 		.average().mark('avg1')
@@ -97,9 +100,15 @@ it('test basic', async () => {
 		.root().get('data')
 		.sum(selectFn).mark('sum2')
 		.avg(selectFn).mark('avg2')
-		.max((a, b) => { return a.changeTimes > b.changeTimes }).mark('max2')
-		.min((a, b) => { return a.changeTimes > b.changeTimes }).mark('min2')
-		.root().find('updateUser').unique((a, b) => { return a == b }).mark('unique')
+		.max((a, b) => {
+			return a.changeTimes > b.changeTimes
+		}).mark('max2')
+		.min((a, b) => {
+			return a.changeTimes > b.changeTimes
+		}).mark('min2')
+		.root().find('updateUser').unique((a, b) => {
+			return a == b
+		}).mark('unique')
 		.pre().mark('p1')
 		.get('[0]')
 		.pre().mark('p2')
@@ -133,13 +142,11 @@ it('test basic', async () => {
 it('test sxg', async () => {
 	var json = [{
 		hello: "            goood  good day      ",
-		peers: [
-			{
-				hi: '           L   i     S             A                '
-			}
-		],
-		test : {
-			lily : true
+		peers: [{
+			hi: '           L   i     S             A                '
+		}],
+		test: {
+			lily: true
 		}
 	}]
 	var options = {
@@ -148,13 +155,13 @@ it('test sxg', async () => {
 				return str.trim()
 			return str
 		},
-		othersHandler : (obj) =>{
-			if(obj && obj.lily == true){
+		othersHandler: (obj) => {
+			if (obj && obj.lily == true) {
 				return 'hello lily'
 			}
 		}
 	}
-	var newJson = await LJ.get(utils.deepCopy(json),sxg,options)
+	var newJson = await LJ.get(utils.deepCopy(json), sxg, options)
 	expect(json[0].hello).toBe("            goood  good day      ")
 	expect(newJson[0].hello).toBe("goood  good day")
 	expect(newJson[0].test).toBe('hello lily')
@@ -164,18 +171,18 @@ it('test sxg', async () => {
 it('test str operation', async () => {
 	var json = [{
 		trim: "  la la  ",
-		trimStart : '  start  ',
-		trimEnd : '  end  ',
-		upper : 'abc',
-		lower : 'ABCDEF',
-		replace : '${abc}ced',
-		replaceObj : {
-			r : true
+		trimStart: '  start  ',
+		trimEnd: '  end  ',
+		upper: 'abc',
+		lower: 'ABCDEF',
+		replace: '${abc}ced',
+		replaceObj: {
+			r: true
 		},
-		replaceArray : [
+		replaceArray: [
 			'${abc}eee',
 			{
-				r:true
+				r: true
 			},
 			'hello'
 		]
@@ -190,11 +197,11 @@ it('test str operation', async () => {
 		.goto('obj').get('trimStart').trimStart()
 		.goto().trimStartAll(' ')
 		.goto().get('trimEnd').trimEnd()
-    	.goto().trimEndAll(' ')
-		.goto().get('replace').replace('${abc}','hello')
-		.goto().replaceAll('${abc}','hello').mark('r1')
-		.goto('obj').replaceAll(null,'hi',(a,b)=>{ 
-			return a ? (a.r  || false) : false
+		.goto().trimEndAll(' ')
+		.goto().get('replace').replace('${abc}', 'hello')
+		.goto().replaceAll('${abc}', 'hello').mark('r1')
+		.goto('obj').replaceAll(null, 'hi', (a, b) => {
+			return a ? (a.r || false) : false
 		}).mark('r2')
 		.do(json)
 
@@ -213,7 +220,7 @@ it('test str operation', async () => {
 	expect(all.marks.r2.replaceObj).toBe('hi')
 	expect(all.marks.r2.replaceArray[1]).toBe('hi')
 
-	expect( await DSON().get('[0].upper').doDraw(json)).toBe('abc')
+	expect(await DSON().get('[0].upper').doDraw(json)).toBe('abc')
 })
 
 // 参数设置为 选择器
@@ -265,122 +272,128 @@ it('test str operation', async () => {
 
 var testJson = {
 	hello: 'good good day',
-	data: [
-		{
-			id: 1,
-			name: 'LiSA',
-			job: [{
-				name: 'singer',
-				long: 11,
-				remark: 'main job'
-			}, {
-				name: 'wife',
-				long: 0
-			}],
-			profile: {
-				height: 165,
-				weight: 48,
-				nice: 95
-			}
+	data: [{
+		id: 1,
+		name: 'LiSA',
+		job: [{
+			name: 'singer',
+			long: 11,
+			remark: 'main job'
 		}, {
-			id: 2,
-			name: 'luna',
-			job: [{
-				name: 'singer',
-				long: 8,
-				remark: 'main job'
-			}, {
-				name: 'model',
-				long: 5
-			}],
-			profile: {
-				height: 155,
-				weight: 45,
-				nice: 93
-			}
-		}, {
-			id: 3,
-			name: 'eir',
-			job: [{
-				name: 'singer',
-				long: 8,
-				remark: 'main job'
-			}],
-			profile: {
-				height: 160,
-				weight: 50,
-				nice: 99
-			}
-		}, {
-			id: 1,
-			name: 'fade',
-			job: [{
-				name: 'actor',
-				long: 3,
-				remark: 'main job'
-			}, {
-				name: 'singer',
-				long: 1
-			}],
-			profile: {
-				height: 170,
-				weight: 65,
-				nice: 50
-			}
-		}, {
-			id: 5,
-			name: 'zhoubichang',
-			job: [{
-				name: 'singer',
-				long: 3,
-				remark: 'main job'
-			}, {
-				name: 'wife',
-				long: 3
-			}],
-			profile: {
-				height: 162,
-				weight: 55,
-				nice: 34
-			}
-		}, {
-			id: 6,
-			name: 'moti',
-			job: [{
-				name: 'singer',
-				long: 3
-			}, {
-				name: 'zhibo',
-				long: 3
-			}],
-			profile: {
-				height: 148,
-				weight: 43,
-				nice: 97
-			}
+			name: 'wife',
+			long: 0
+		}],
+		profile: {
+			height: 165,
+			weight: 48,
+			nice: 95
 		}
-	]
+	}, {
+		id: 2,
+		name: 'luna',
+		job: [{
+			name: 'singer',
+			long: 8,
+			remark: 'main job'
+		}, {
+			name: 'model',
+			long: 5
+		}],
+		profile: {
+			height: 155,
+			weight: 45,
+			nice: 93
+		}
+	}, {
+		id: 3,
+		name: 'eir',
+		job: [{
+			name: 'singer',
+			long: 8,
+			remark: 'main job'
+		}],
+		profile: {
+			height: 160,
+			weight: 50,
+			nice: 99
+		}
+	}, {
+		id: 1,
+		name: 'fade',
+		job: [{
+			name: 'actor',
+			long: 3,
+			remark: 'main job'
+		}, {
+			name: 'singer',
+			long: 1
+		}],
+		profile: {
+			height: 170,
+			weight: 65,
+			nice: 50
+		}
+	}, {
+		id: 5,
+		name: 'zhoubichang',
+		job: [{
+			name: 'singer',
+			long: 3,
+			remark: 'main job'
+		}, {
+			name: 'wife',
+			long: 3
+		}],
+		profile: {
+			height: 162,
+			weight: 55,
+			nice: 34
+		}
+	}, {
+		id: 6,
+		name: 'moti',
+		job: [{
+			name: 'singer',
+			long: 3
+		}, {
+			name: 'zhibo',
+			long: 3
+		}],
+		profile: {
+			height: 148,
+			weight: 43,
+			nice: 97
+		}
+	}]
 }
 
 
-it('test selector', async()=>{
+it('test selector', async () => {
 	var json = {
-		hi : 'good day',
-		num : [1,2,3]
+		hi: 'good day',
+		num: [1, 2, 3]
 	}
 	expect(await d('hi').doDraw(json)).toBe('good day')
 	expect(await d('num[1]').doDraw(json)).toBe(2)
-	
+
 })
 
-it('test $', async()=>{
+it('test $', async () => {
 	var json = {
-		hi : 'good day',
-		num : [1,2,3],
-		array : [
-			{ name : 'LiSA', age : 23 },
-			{ name : 'lily', age : 18 },
-			{ name : 'link', age : 33 }
+		hi: 'good day',
+		num: [1, 2, 3],
+		array: [{
+				name: 'LiSA',
+				age: 23
+			},
+			{
+				name: 'lily',
+				age: 18
+			},
+			{
+				name: 'link',
+				age: 33
+			}
 		]
 	}
 	//todo test $
@@ -388,100 +401,111 @@ it('test $', async()=>{
 	//var r = await JVD().$('>4').or().$(JVD().gt(2)).test(json.num)
 	expect(await d('num').test(JVD().$('>4').or().$(JVD().gt(2))).doTest(json)).toBe(true)
 
-	var r1= await d().test({
-		hi : {
-			isJVD : ()=>{return true},
-			test : ()=>{ return false},
-			hi : '!!&&>2'
+	var r1 = await d().test({
+		hi: {
+			isJVD: () => {
+				return true
+			},
+			test: () => {
+				return false
+			},
+			hi: '!!&&>2'
 		},
-		num : '>2'
+		num: '>2'
 	}).doTest(json)
 	expect(r1).toBe(false)
 
-	var r2= await d().test({
-		hi : {
-			isDSON : ()=>{return true},
-			doTest : ()=>{ return true},
-			hi : '!!&&>2'
+	var r2 = await d().test({
+		hi: {
+			isDSON: () => {
+				return true
+			},
+			doTest: () => {
+				return true
+			},
+			hi: '!!&&>2'
 		},
-		num : '>2'
+		num: '>2'
 	}).doTest(json)
 	expect(r2).toBe(true)
 
-	expect(await d('hi').test((data)=>{ return data.length > 3}).doTest(json)).toBe(true)
-	expect(await d('hi').test(async (data)=>{return null }).doTest(json)).toBe(null)
+	expect(await d('hi').test((data) => {
+		return data.length > 3
+	}).doTest(json)).toBe(true)
+	expect(await d('hi').test(async (data) => {
+		return null
+	}).doTest(json)).toBe(null)
 
 	expect(await d().test({
-		hi: (data) => {return data.length > 3},
-		array : (data)=>{ return data.length >2}
+		hi: (data) => {
+			return data.length > 3
+		},
+		array: (data) => {
+			return data.length > 2
+		}
 	}).doTest(json)).toBe(true)
-	
-	
+
+
 	//递归
 	expect(await d().test({
 		hi: '>3',
-		array : JVD().gt(10).or().$(DSON('[0]').test({ age : '>23'}))
+		array: JVD().gt(10).or().$(DSON('[0]').test({
+			age: '>23'
+		}))
 	}).doTest(json)).toBe(false)
 
 	expect(await d().test({
-		array : [
-			{
-				age : '>18'
-			},{
-				age : '<20'
-			}
-		]
+		array: [{
+			age: '>18'
+		}, {
+			age: '<20'
+		}]
 	}).doTest(json)).toBe(true)
 
 	expect(await d().test({
-		array : [
-			{
-				age : '>18'
-			}
-		]
+		array: [{
+			age: '>18'
+		}]
 	}).doTest(json)).toBe(false)
 
 	expect(await d().test({
-		array : [
-			{
-				age : '>18'
-			},{
-				name : DSON().mark('lily'),
-				age : '<20'
-			}
-		]
+		array: [{
+			age: '>18'
+		}, {
+			name: DSON().mark('lily'),
+			age: '<20'
+		}]
 	}).goto('lily').test('>4').doTest(json)).toBe(false)
 
 	expect(await d().test({
-		array : [
-			JVD().$((data)=>{ 
+		array: [
+			JVD().$((data) => {
 				return data.age > 17
 			})
 		]
 	}).doTest(json)).toBe(true)
 
 	expect(await d().test({
-		array : [
-			JVD().$((data)=>{ 
+		array: [
+			JVD().$((data) => {
 				return data.age > 17
 			})
 		]
 	}).doTest(json)).toBe(true)
 
 	expect(await d().test({
-		array : [
+		array: [
 			DSON().test({
-				age : JVD().gt(18)
-			})
-			,{}
+				age: JVD().gt(18)
+			}), {}
 		]
 	}).doTest(json)).toBe(true)
 })
 
-it('test test/expect' , async()=>{
+it('test test/expect', async () => {
 	var json = {
-		hi : 'good day',
-		num : [1,2,3]
+		hi: 'good day',
+		num: [1, 2, 3]
 	}
 	expect(await d('hi').test('>3').doTest(json)).toBeTruthy()
 	expect(await d('num').test('>4').doTest(json)).toBe(false)
@@ -498,71 +522,87 @@ it('test test/expect' , async()=>{
 
 })
 
-it('test where / filter     &   test / expect',async ()=>{
+it('test where / filter     &   test / expect', async () => {
 	expect(await d().get('data').where(d('job').get().test('>1')).test('>4').test('<6').doTest(testJson)).toBeTruthy()
 	expect((await d().get('data').where(d('job').get().test(JVD().gt(1))).doDraw(testJson)).length).toBe(5)
 	expect((await d().get('data').where(d('job').get().count().test(JVD().gt(1))).doDraw(testJson)).length).toBe(5)
-	expect((await d('data').get().where((data,context)=>{ return data.job.length > 1}).doDraw(testJson)).length).toBe(5)
+	expect((await d('data').get().where((data, context) => {
+		return data.job.length > 1
+	}).doDraw(testJson)).length).toBe(5)
 	//寻找美女的名字
 	expect((await d('data').where(JVD().$(d('profile.nice').test('>95')).or()
-	.$(d('profile.height').expect('?(164,170)')).$(d('profile.weight').expect('?(45,55)'))).doDraw(testJson)).length).toBe(3)
-	
+		.$(d('profile.height').expect('?(164,170)')).$(d('profile.weight').expect('?(45,55)'))).doDraw(testJson)).length).toBe(3)
+
 	expect((await d('data').where(JVD().$({
-		profile:{
-			height : '?(164,175)',
+		profile: {
+			height: '?(164,175)',
 			weight: '?(45,55)'
 		}
 	}).or().$({
-		profile: { nice : ">95"}
+		profile: {
+			nice: ">95"
+		}
 	})).get('[].name').doDraw(testJson)).length).toBe(3)
 })
 
-it2('test sxgGet', async()=>{
+it2('test sxgGet', async () => {
 	var template = {
-		key0 : '$',
-		array : ['$','$','$'],
-		'key0.1' : '$',
-		'key0.2' : {
-			'key0.3' : '$',
-			'key0.2' : '$value0.2'
+		key0: '$',
+		array: ['$', '$', '$'],
+		'key0.1': '$',
+		'key0.2': {
+			'key0.3': '$',
+			'key0.2': '$value0.2'
 		},
-		key1 : DSON().get({
-			hello : 'real good days ${value4}'
+		key1: DSON().get({
+			hello: 'real good days ${value4}'
 		}),
-		$key2 : '$',
-		'${key3}' : 'hello 3',
-		key4 : '$value4',
-		key5 : '$value5.name',
-		key6 : '${value6}',
-		key7 : 'hi ${value7.name} ....',
+		$key2: '$',
+		'${key3}': 'hello 3',
+		key4: '$value4',
+		key5: '$value5.name',
+		key6: '${value6}',
+		key7: 'hi ${value7.name} ....',
 		// key8 : '${mark8}',
 		// key9 : '${autoMark9}',
 		// key10 : d((data,context)=>{ return '$value11'}),
 		// key11 : d(async (data,context)=>{ return ['cde']}),
 		// key12 : ()=>{},
-		key13 : '${_d.name}'
+		key13: '${_d.name}'
 	}
 	var options = {
-		data : {
-			key0 : { name : "KEY0", "key0.1" : "KEY0.1"},
-			'key0.3' : 'hello hello 0.3',
-			'name' : 'Mike',
-			'null' : 'here is null',
-			array : ['hi','hello']
+		data: {
+			key0: {
+				name: "KEY0",
+				"key0.1": "KEY0.1"
+			},
+			'key0.3': 'hello hello 0.3',
+			'name': 'Mike',
+			'null': 'here is null',
+			array: ['hi', 'hello']
 		},
-		context : {
-			'value0.2' : {name :'V0.2'},
-			'key2' : null,
-			key3 : 'helloKEY3',
-			value4 : 4,
-			value5 : { name : "V5" ,age :5},
-			value6 : '666',
-			value7 : { name : 'LiSA' , job : 'singer'}
+		relacement: {
+				'value0.2': {
+					name: 'V0.2'
+				},
+				'key2': null,
+				key3: 'helloKEY3',
+				value4: 4,
+				value5: {
+					name: "V5",
+					age: 5
+				},
+				value6: '666',
+				value7: {
+					name: 'LiSA',
+					job: 'singer'
+				}
+			
 		}
 	}
-	options.context._d = options.context._data = options.data
-	var result = await LJ.get(template,sxgGet,options)
-	
+	options.relacement._d = options.relacement._data = options.data
+	var result = await LJ.get(template, sxgGet, options)
+
 	expect(result.key0).toBe(options.data.key0)
 	expect(result.null).toBe('here is null')
 	expect(result.array[2]).toBe(null)
@@ -579,8 +619,36 @@ it2('test sxgGet', async()=>{
 })
 
 
-it('test get/fetch/select/draw/extract/format', async ()=>{
-	//todo
+it('test get/fetch/select/draw/extract/format', async () => {
+	var template = {
+		key0: '$',
+		array: ['$', '$', '$'],
+		'key0.1': '$',
+		'key0.2': {
+			'key0.3': '$',
+			'key0.2': '$value0.2'
+		},
+		key1: DSON().get({
+			hello: 'real good days ${value4}'
+		}),
+		$key2: '$',
+		'${key3}': 'hello 3',
+		key4: '$value4',
+		key5: '$value5.name',
+		key6: '${value6}',
+		key7: 'hi ${value7.name} ....',
+		key8: '${mark8}',
+		key9: '${autoMark9}',
+		key10: d((data, context) => {
+			return '$value11'
+		}),
+		key11: d(async (data, context) => {
+			return ['cde']
+		}),
+		key12: () => {},
+		key13: '${_d.name}'
+	}
+
 	//todo 测试递归
 })
 

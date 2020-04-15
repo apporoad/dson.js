@@ -67,6 +67,9 @@ function DSON() {
             //context.test = options.context.test || []
             context.JVD = options.context.JVD
         }
+        //传递
+        if(options)
+            context.defaultReplacementJson = options.replacementJson
         //selector
         if(_this.selector && _this._implements['select']){
             await Promise.resolve(_this._implements['select'].apply(_this, [context,_this.selector]))

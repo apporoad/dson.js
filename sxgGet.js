@@ -28,9 +28,9 @@ exports.isLustForString = async (str, options, innerLJ) => {
  */
 exports.getLustForString = async (str, options, innerLJ) => {
     if (str == '$') {
-        return ljson(options.context._d).get(innerLJ.LJ.dotTree)
+        return ljson(options.data).get(innerLJ.LJ.dotTree)
     }
-    return lutils.fillNeeds(str, options.context)
+    return lutils.fillNeeds(str, options.replacement)
 }
 
 /**
@@ -51,8 +51,11 @@ exports.isLustForObject = async (obj, options, innerLJ) => {
  */
 exports.getLustForObject = async (obj, options, innerLJ) => {
     if (options && options.data && uType.isFunction(obj.isDSON) && obj.isDSON()) {
+        //options.replacementJson = options.replacementJson || {}
+        //todo 传递 replacement
         return await obj.doDraw(options.data, {
-            context: options.context
+            context: options.context,
+            replacementJson : options.replacement
         })
     }
     return null
@@ -76,15 +79,15 @@ exports.isLustForKV = async (k, v, options, innerLJ) => {
 exports.getLustForKV = async (k, v, options, innerLJ) => {
     if (lutils.hasNeeds(k)) {
         return {
-            key: lutils.fillNeeds(k, options.context) + ''
+            key: lutils.fillNeeds(k,options.replacement) + ''
         }
     }
     if (v == '$') {
-        var value0 = ljson(options.context._d).get(innerLJ.LJ.dotTree.replace('???', innerLJ.LJ.key))
+        var value0 = ljson(options.data).get(innerLJ.LJ.dotTree.replace('???', innerLJ.LJ.key))
         var value1 = value0 
         if(!value1){
             value1 = []
-            var array = await Promise.resolve(ljson(options.context._d).find(k))
+            var array = await Promise.resolve(ljson(options.data).find(k))
             array.forEach(a=>{ value1.push(a.value)})
         }
         return {

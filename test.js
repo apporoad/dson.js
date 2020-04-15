@@ -4,6 +4,7 @@ const LJ = require('lustjson.js')
 const sxg = require('./sxg')
 const JVD = require('./index').JVD
 const utils = require('lisa.utils')
+const sxgGet = require('./sxgGet')
 
 var it2 = global.debug || it
 
@@ -516,8 +517,71 @@ it('test where / filter     &   test / expect',async ()=>{
 	})).get('[].name').doDraw(testJson)).length).toBe(3)
 })
 
+it2('test sxgGet', async()=>{
+	var template = {
+		key0 : '$',
+		array : ['$','$','$'],
+		'key0.1' : '$',
+		'key0.2' : {
+			'key0.3' : '$',
+			'key0.2' : '$value0.2'
+		},
+		key1 : DSON().get({
+			hello : 'real good days ${value4}'
+		}),
+		$key2 : '$',
+		'${key3}' : 'hello 3',
+		key4 : '$value4',
+		key5 : '$value5.name',
+		key6 : '${value6}',
+		key7 : 'hi ${value7.name} ....',
+		// key8 : '${mark8}',
+		// key9 : '${autoMark9}',
+		// key10 : d((data,context)=>{ return '$value11'}),
+		// key11 : d(async (data,context)=>{ return ['cde']}),
+		// key12 : ()=>{},
+		key13 : '${_d.name}'
+	}
+	var options = {
+		data : {
+			key0 : { name : "KEY0", "key0.1" : "KEY0.1"},
+			'key0.3' : 'hello hello 0.3',
+			'name' : 'Mike',
+			'null' : 'here is null',
+			array : ['hi','hello']
+		},
+		context : {
+			'value0.2' : {name :'V0.2'},
+			'key2' : null,
+			key3 : 'helloKEY3',
+			value4 : 4,
+			value5 : { name : "V5" ,age :5},
+			value6 : '666',
+			value7 : { name : 'LiSA' , job : 'singer'}
+		}
+	}
+	options.context._d = options.context._data = options.data
+	var result = await LJ.get(template,sxgGet,options)
+	
+	expect(result.key0).toBe(options.data.key0)
+	expect(result.null).toBe('here is null')
+	expect(result.array[2]).toBe(null)
+	expect(result['key0.1'].length).toBe(1)
+	expect(result['key0.2']['key0.3'][0]).toBe('hello hello 0.3')
+	expect(result['key0.2']['key0.2'].name).toBe('V0.2')
+	expect(result.helloKEY3).toBe('hello 3')
+	expect(result.key4).toBe(4)
+	expect(result.key5).toBe('V5')
+	expect(result.key6).toBe('666')
+	expect(result.key7).toBe('hi LiSA ....')
+	expect(result.key13).toBe('Mike')
+	//expect(result.key1.hello).toBe('real good days 4')
+})
+
+
 it('test get/fetch/select/draw/extract/format', async ()=>{
 	//todo
+	//todo 测试递归
 })
 
 // DSON().get('data').count().mark('dataCount').each()

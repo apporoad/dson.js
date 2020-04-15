@@ -367,7 +367,8 @@ var innerGetFromTemplateOrDSON = async (expression, data, context, replacementJs
                 context : context,
                 replacement : Object.assign({}, context.defaultReplacementJson || {}, 
                     context.autoMarks || {}, context.marks || {},
-                    replacementJson)
+                    replacementJson),
+                replacementJson : replacementJson
             }
             var result = await LJ.get(expression,sxgGet,options)
             return result

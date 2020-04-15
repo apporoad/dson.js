@@ -581,7 +581,7 @@ it2('test sxgGet', async () => {
 			'null': 'here is null',
 			array: ['hi', 'hello']
 		},
-		relacement: {
+		replacement: {
 				'value0.2': {
 					name: 'V0.2'
 				},
@@ -600,7 +600,7 @@ it2('test sxgGet', async () => {
 			
 		}
 	}
-	options.relacement._d = options.relacement._data = options.data
+	options.replacement._d = options.replacement._data = options.data
 	var result = await LJ.get(template, sxgGet, options)
 
 	expect(result.key0).toBe(options.data.key0)

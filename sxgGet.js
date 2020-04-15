@@ -55,7 +55,7 @@ exports.getLustForObject = async (obj, options, innerLJ) => {
         //todo 传递 replacement
         return await obj.doDraw(options.data, {
             context: options.context,
-            replacementJson : options.replacement
+            replacementJson : options.replacementJson
         })
     }
     return null

@@ -370,6 +370,7 @@ var innerGetFromTemplateOrDSON = async (expression, data, context, replacementJs
                     replacementJson),
                 replacementJson : replacementJson
             }
+            options.replacement._d = options.replacement._data = options.data
             var result = await LJ.get(expression,sxgGet,options)
             return result
         }

@@ -223,53 +223,6 @@ it('test str operation', async () => {
 	expect(await DSON().get('[0].upper').doDraw(json)).toBe('abc')
 })
 
-// 参数设置为 选择器
-// it('test defaultParams', async()=>{
-// 	var json = {
-// 		hello : ' lLiSA '
-// 	}
-// 	var result = await DSON([' ','l']).trimStartAll().doSelect(json)
-// 	expect(result.hello).toBe('LiSA ')
-// })
-
-//找到updateUser为LiSA的数据中 insertUser ，并校验是否为空，是否是LiSA
-
-//判断 是否存在 updateTime <insertTime 的数据
-
-// 获取 changeTimes 加和 并判断是否大于6
-
-// 找到changeTimes 次数最多的数据 ， changeTimes 平均值
-
-//找到所有bizType 的种类
-
-// 找到字段长度为10的字段名称
-
-// 校验bizNo 是否均符合要求
-
-
-
-
-// var dson = DSON().find({
-//     key : 'asdf'
-// }).test('?>10&<20').mark('hello')
-// .find('hello').test('!=1000')
-// .root().find('node').test({
-//     hello : "?='world'",
-//     cheers :[
-//         {
-//             hello : JVD().required().isArray()
-//         }
-//     ]
-// })
-
-
-// dson.do(json).then(data=>{
-//     console.log(data.hello)
-// })
-// dson.doTest(json)
-
-
-
 var testJson = {
 	hello: 'good good day',
 	data: [{
@@ -396,7 +349,6 @@ it('test $', async () => {
 			}
 		]
 	}
-	//todo test $
 	//var jvd = JVD()
 	//var r = await JVD().$('>4').or().$(JVD().gt(2)).test(json.num)
 	expect(await d('num').test(JVD().$('>4').or().$(JVD().gt(2))).doTest(json)).toBe(true)
@@ -545,7 +497,7 @@ it('test where / filter     &   test / expect', async () => {
 	})).get('[].name').doDraw(testJson)).length).toBe(3)
 })
 
-it2('test sxgGet', async () => {
+it('test sxgGet', async () => {
 	var template = {
 		key0: '$',
 		array: ['$', '$', '$'],
@@ -582,22 +534,22 @@ it2('test sxgGet', async () => {
 			array: ['hi', 'hello']
 		},
 		replacement: {
-				'value0.2': {
-					name: 'V0.2'
-				},
-				'key2': null,
-				key3: 'helloKEY3',
-				value4: 4,
-				value5: {
-					name: "V5",
-					age: 5
-				},
-				value6: '666',
-				value7: {
-					name: 'LiSA',
-					job: 'singer'
-				}
-			
+			'value0.2': {
+				name: 'V0.2'
+			},
+			'key2': null,
+			key3: 'helloKEY3',
+			value4: 4,
+			value5: {
+				name: "V5",
+				age: 5
+			},
+			value6: '666',
+			value7: {
+				name: 'LiSA',
+				job: 'singer'
+			}
+
 		}
 	}
 	options.replacement._d = options.replacement._data = options.data
@@ -649,40 +601,50 @@ it('test get/fetch/select/draw/extract/format', async () => {
 		key13: '${_d.name}'
 	}
 
-	//todo 测试递归
+	var data = {
+		key0: {
+			name: "KEY0",
+			"key0.1": "KEY0.1"
+		},
+		'key0.3': 'hello hello 0.3',
+		'name': 'Mike',
+		'null': 'here is null',
+		array: ['hi', 'hello']
+	}
+	var replacement = {
+		'value0.2': {
+			name: 'V0.2'
+		},
+		'key2': null,
+		key3: 'helloKEY3',
+		value4: 4,
+		value5: {
+			name: "V5",
+			age: 5
+		},
+		value6: '666',
+		value7: {
+			name: 'LiSA',
+			job: 'singer'
+		}
+
+	}
+
+	var result = await d().get('name').mark('mark8').root().select(template,replacement).doDraw(data)
+
+	expect(result.key0).toBe(data.key0)
+	expect(result.null).toBe('here is null')
+	expect(result.array[2]).toBe(null)
+	expect(result['key0.1'].length).toBe(1)
+	expect(result['key0.2']['key0.3'][0]).toBe('hello hello 0.3')
+	expect(result['key0.2']['key0.2'].name).toBe('V0.2')
+	expect(result.helloKEY3).toBe('hello 3')
+	expect(result.key4).toBe(4)
+	expect(result.key5).toBe('V5')
+	expect(result.key6).toBe('666')
+	expect(result.key7).toBe('hi LiSA ....')
+	expect(result.key8).toBe('Mike')
+	expect(result.key13).toBe('Mike')
+	expect(result.key1.hello).toBe('real good days 4')
+	// 测试递归
 })
-
-// DSON().get('data').count().mark('dataCount').each()
-// DSON().get('data').count().mark('dataCount').all()
-// DSON().get('data').count().mark('dataCount').first()
-// DSON().get('data').count().mark('dataCount').last()
-// DSON().get('data').count().mark('dataCount').random()
-// DSON().get('data').count().mark('dataCount').top()
-// DSON().get('data').count().mark('dataCount').top(3)
-// DSON().get('data').count().mark('dataCount').last(2).mark('last2')
-// DSON().get('data').count().mark('dataCount').each().where({
-// 	profile: {
-// 		nice : '>60'
-// 	}
-// }).test({
-// 			id : '?number&?nonRepeatable',
-// 			job :  DSON().count().test('>0'),
-// 			profile : {
-// 				height : JVD().isNumber().between(100,200),
-// 			}
-// })
-
-
-// DSON().get('data').count().mark('dataCount').all().where(DSON().find('job').all().where(DSON().get('long').where('>3').count().test('>0'))).mark('hello')
-// DSON().get('data[]').where(DSON('job[]').where(DSON('long').where('>3').count().test('>0'))).mark('hello')
-
-// DSON().get('data[].job[].long').sum()
-// DSON().get('data[].job[].long').average().max().min().dateDiff().unique()//?
-// DSON().get('data[].job[].name').trim().trimStart('start').trimEnd('end')
-//     .toUpper().toLower().toUpperCase()
-//     .toLowerCase().replace().substring().substr()
-//     .order().format()
-//     .select({
-//         target : '',
-//         newName : DSON('name')
-//     })

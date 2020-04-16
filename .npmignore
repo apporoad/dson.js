@@ -108,3 +108,9 @@ goTest.js
 test.js
 
 .vscode/
+
+utils.test.js
+demo.test.js
+index.html
+
+dson.frontend.js

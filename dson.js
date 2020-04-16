@@ -38,8 +38,8 @@ function DSON() {
     /**
      * 执行抽取操作，返回context中的最后的值
      */
-    this.doDraw = this.doSelect = async data =>{
-        var context = await _this.do(data)
+    this.doDraw = this.doSelect = async (data,options) =>{
+        var context = await _this.do(data,options)
         return context.tempData
     }
 

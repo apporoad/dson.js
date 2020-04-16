@@ -51,7 +51,6 @@ exports.isLustForObject = async (obj, options, innerLJ) => {
  */
 exports.getLustForObject = async (obj, options, innerLJ) => {
     if (options && options.data && uType.isFunction(obj.isDSON) && obj.isDSON()) {
-        //options.replacementJson = options.replacementJson || {}
         //todo 传递 replacement
         return await obj.doDraw(options.data, {
             context: options.context,

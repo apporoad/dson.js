@@ -446,8 +446,54 @@ exports.print = (context, expression) => {
     console.log(context.tempData)
 }
 
-exports.push = () => {}
-exports.pop
+
+exports.push = (context,name)=>{
+    if (uType.isString(name)) {
+        if(context.marks[name]){
+            if(uType.isArray(context.marks[name])){
+                context.marks[name].push(context.tempData)
+            }else{
+                context.marks[name] = [context.marks[name]]
+                context.marks[name].push(context.tempData)
+            }
+        }else{
+            context.marks[name] = [context.tempData]
+        }
+    }
+}
+exports.pop = (context, name)=>{
+    if(uType.isString(name) && context.marks[name]){
+         if(uType.isArray(context.marks[name])){
+                context.currentData=context.tempData = context.marks[name].pop()
+         }else{
+                context.currentData = context.tempData =context.mark[name]
+         }
+    }
+}
+
+exports.unshift = (context,name)=>{
+    if (uType.isString(name)) {
+        if(context.marks[name]){
+            if(uType.isArray(context.marks[name])){
+                context.marks[name].unshift(context.tempData)
+            }else{
+                context.marks[name] = [context.marks[name]]
+                context.marks[name].unshift(context.tempData)
+            }
+        }else{
+            context.marks[name] = [context.tempData]
+        }
+    }
+}
+exports.shift = (context, name)=>{
+    if(uType.isString(name) && context.marks[name]){
+         if(uType.isArray(context.marks[name])){
+                context.currentData=context.tempData = context.marks[name].shift()
+         }else{
+                context.currentData = context.tempData = context.mark[name]
+         }
+    }
+}
 
 // exports.each = exports.forEach
 // exports.sequence

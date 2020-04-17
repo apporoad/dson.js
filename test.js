@@ -648,3 +648,25 @@ it('test get/fetch/select/draw/extract/format', async () => {
 	expect(result.key1.hello).toBe('real good days 4')
 	// 测试递归
 })
+
+
+it2('test array operation',async ()=>{
+	var json = {
+		v1 : 1,
+		v2 : 2,
+		v3 : 3,
+		v4 : 4
+	}
+	var r = await d({
+		v1 : d('v1').push('a'),
+		v2 : d('v2').push('a'),
+		v3 : '$_d.v3',
+		v4 : '$_data.v4'
+	}).get('v3').push('b').root().get('v4').unshift('b')
+	.pop('a').mark('value2').shift('b').mark('value4').do(json)
+
+	expect(r.marks.a[0]).toBe(1)
+	expect(r.marks.b[0]).toBe(3)
+	expect(r.marks.value2).toBe(2)
+	expect(r.marks.value4).toBe(4)
+})

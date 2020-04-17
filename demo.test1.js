@@ -1,6 +1,7 @@
 // 这里是经典测试
 const d = D = DSON = require('./index').DSON
-const JVD = require('./index').JVD
+const JVD = j = J = require('./index').JVD
+
 
 var it2 = global.debug || it
 

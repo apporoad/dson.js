@@ -5,7 +5,6 @@ const sxg = require('./sxg')
 const sxgGet = require('./sxgGet')
 const LJ = require('lustjson.js')
 
-
 exports.mark = (context, name) => {
     if (name) {
         context.marks[name] = context.tempData
@@ -393,6 +392,7 @@ exports.get = exports.fetch = async (context, expression, replacementJson) => {
 
 exports.select = exports.draw = exports.extract = exports.get
 exports.format = exports.select
+exports.render = exports.select
 
 var expect = async (data, context, expressionOrJVDOrTemplate, info) => {
     var test = []
@@ -449,6 +449,5 @@ exports.print = (context, expression) => {
 exports.push = () => {}
 exports.pop
 
-exports.each = exports.forEach
-
-exports.sequence
+// exports.each = exports.forEach
+// exports.sequence

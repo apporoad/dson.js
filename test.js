@@ -650,7 +650,7 @@ it('test get/fetch/select/draw/extract/format', async () => {
 })
 
 
-it2('test array operation',async ()=>{
+it('test array operation',async ()=>{
 	var json = {
 		v1 : 1,
 		v2 : 2,
@@ -669,4 +669,16 @@ it2('test array operation',async ()=>{
 	expect(r.marks.b[0]).toBe(3)
 	expect(r.marks.value2).toBe(2)
 	expect(r.marks.value4).toBe(4)
+})
+
+it('test order',async()=>{
+	var json = [
+		{ id : 1 ,name : 'v1'},
+		{ id : 3 ,name : 'v3'},
+		{ id : 2 ,name : 'v2'},
+		{ id : 0 ,name : 'v0'},
+	]
+
+	var r = await d().sort((a,b)=>{ return a.id > b.id}).doDraw(json)
+	expect(r[0].id).toBe(0)
 })

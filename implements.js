@@ -95,6 +95,12 @@ exports.distinct = (context, compareFn) => {
     }
 }
 
+exports.order = exports.sort = (context,compareFn)=>{
+    if(utils.Type.isArray(context.currentData)){
+        context.currentData = context.tempData = utils.ArraySort(context.currentData,compareFn)
+    }
+}
+
 var sum = async (arr, selectFn) => {
     var total = 0
     for (var i = 0; i < arr.length; i++) {
@@ -308,7 +314,6 @@ exports.substring = (context, start, end) => {
     }
 }
 
-exports.order
 
 var getResult = (results) => {
     var result = null

@@ -502,3 +502,9 @@ exports.shift = (context, name)=>{
 
 // exports.each = exports.forEach
 // exports.sequence
+
+exports.debug= async (context,fn)=>{
+    if(uType.isFunction(fn) || uType.isAsyncFunction(fn)){
+        await Promise.resolve(fn(context.tempData,context))
+    }
+}

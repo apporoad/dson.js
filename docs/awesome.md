@@ -47,7 +47,8 @@ Multiverse
 
 line
 gate
-
+trigger
+event
 
 
 ```

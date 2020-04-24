@@ -25,3 +25,10 @@ npm i --save dson.js
 2. servants   saber
 3. 语言嵌套
 4. serialize
+
+# 细节场景
+1. 抽出数据
+2. 复杂抽出数据
+3. 对数据做校验
+4. format json
+5. 神奇的使用

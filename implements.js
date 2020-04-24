@@ -399,7 +399,7 @@ exports.select = exports.draw = exports.extract = exports.get
 exports.format = exports.select
 exports.render = exports.select
 
-var expect = async (data, context, expressionOrJVDOrTemplate, info) => {
+var expect = async (data, context, expressionOrJVDOrTemplate) => {
     var test = []
     var expressionOrJVD = expressionOrJVDOrTemplate
     if (expressionOrJVD) {
@@ -438,12 +438,36 @@ var expect = async (data, context, expressionOrJVDOrTemplate, info) => {
     return test
 }
 
-exports.test = exports.expect = async (context, expressionOrDsonOrJvdOrTemplate, info) => {
-    var testArray = await expect(context.tempData, context, expressionOrDsonOrJvdOrTemplate, info)
+var innerCalcTest = (testArray)=>{
+    if(!testArray) return null
+    var result = null
+    for(var i =0;i< testArray .length;i++){
+        if(testArray[i] == null || testArray[i] == undefined){
+            continue
+        }
+        if(!testArray[i]){
+            result = false
+            break
+        }else{
+            result = true
+        }
+    }
+    return result
+}
+
+exports.test = exports.expect = async (context, expressionOrDsonOrJvdOrTemplate, failInfo) => {
+    var testArray = await expect(context.tempData, context, expressionOrDsonOrJvdOrTemplate)
     if (testArray && testArray.length > 0) {
         testArray.forEach(t => {
             context.test.push(t)
         })
+    }
+    if(failInfo && testArray && innerCalcTest(testArray) == false){
+        if(uType.isString(failInfo)){
+            console.log(failInfo)
+        }else if (uType.isFunction(failInfo) || uType.isAsyncFunction(failInfo)){
+            await Promise.resolve(failInfo(context.tempData,expressionOrDsonOrJvdOrTemplate,context))
+        }
     }
 }
 

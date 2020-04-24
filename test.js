@@ -63,7 +63,7 @@ var json = {
 	"message": null
 }
 
-it('test basic', async () => {
+it2('test basic', async () => {
 
 	// var masks = await DSON().get("data[0].mode").mark('oneMode').do(json)	
 	// expect(masks.oneMode).toBe('0514')
@@ -101,7 +101,7 @@ it('test basic', async () => {
 		.sum(selectFn).mark('sum2')
 		.avg(selectFn).mark('avg2')
 		.max((a, b) => {
-			return a.changeTimes > b.changeTimes
+			return a.changeTimes > b.changeTimes 
 		}).mark('max2')
 		.min((a, b) => {
 			return a.changeTimes > b.changeTimes
@@ -679,6 +679,11 @@ it('test order',async()=>{
 		{ id : 0 ,name : 'v0'},
 	]
 
-	var r = await d().sort((a,b)=>{ return a.id > b.id}).doDraw(json)
+	var r = await d().sort((a,b)=>{  
+		return a.id > b.id ? 1: -1
+	}).doDraw(json)
 	expect(r[0].id).toBe(0)
 })
+
+
+//todo test info

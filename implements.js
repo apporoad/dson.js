@@ -464,9 +464,12 @@ exports.test = exports.expect = async (context, expressionOrDsonOrJvdOrTemplate,
     }
     if(failInfo && testArray && innerCalcTest(testArray) == false){
         if(uType.isString(failInfo)){
+            context.testInfo = context.testInfo || []
             console.log(failInfo)
+            context.testInfo.push(failInfo)
         }else if (uType.isFunction(failInfo) || uType.isAsyncFunction(failInfo)){
-            await Promise.resolve(failInfo(context.tempData,expressionOrDsonOrJvdOrTemplate,context))
+            context.testInfo = context.testInfo || []
+            context.testInfo.push(await Promise.resolve(failInfo(context.tempData,context)))
         }
     }
 }

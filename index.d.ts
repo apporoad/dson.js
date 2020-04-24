@@ -335,16 +335,16 @@ declare class DSON {
     /**
      * 期待，用于测试
      * @param expressionOrDsonOrJvdOrTemplate 表达式 jvd表达式 JVD， DSON， 模板，数组模板
-     * @param info 
+     * @param info  string or function(data,context)
      */
-    test(expressionOrDsonOrJvdOrTemplate, info : Object) :DSON
+    test(expressionOrDsonOrJvdOrTemplate, info : string) :DSON
     
     /**
      * just as test
      * @param expressionOrDsonOrJvdOrTemplate 
-     * @param info 
+     * @param info  string or function(data,context)
      */
-    expect (expressionOrDsonOrJvdOrTemplate, info : Object) :DSON
+    expect (expressionOrDsonOrJvdOrTemplate, info : string) :DSON
 
     /**
      * 控制台打印出当前值，用于测试

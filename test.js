@@ -63,7 +63,7 @@ var json = {
 	"message": null
 }
 
-it2('test basic', async () => {
+it('test basic', async () => {
 
 	// var masks = await DSON().get("data[0].mode").mark('oneMode').do(json)	
 	// expect(masks.oneMode).toBe('0514')
@@ -687,3 +687,19 @@ it('test order',async()=>{
 
 
 //todo test info
+it2('test test info',async ()=>{
+	
+
+	//寻找美女的名字
+	expect((await d('data').where(JVD().$(d('profile.nice').test('>95')).or()
+		.$(d('profile.height').expect('?(164,170)')).$(d('profile.weight').expect('?(45,55)'))).count().test('>3','美女的数量不大于三个')
+		.test('>2','美人小于三个')
+		.test('>3', (data,context)=>{
+			console.log(data)
+			//console.log(context)
+		})
+		.doTest(testJson))).toBe(false)
+
+
+
+})

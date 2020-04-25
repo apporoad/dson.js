@@ -16,7 +16,7 @@
         "students":[
              { "name":"Ichinose Honami" , "cnName":"一之濑帆波" , "cv" : "东山奈央" , "age":16 ,"gender" : 2,"birthday":"7.20" , "height" : 159 , "BWH":"B95 W61 H91" ,
             "abilities":{ "learn" : "B+" , "intel" : "A" , "judgement" : "B" , "sport": "C" , "coop": "A-" }},
-             { "name":"神崎隆二" , "cnName":"神崎隆二" , "cv" : "xxxxxxxx" , "age": null ,"gender" : 2,"birthday": null , "height" : null  ,
+             { "name":"神崎隆二" , "cnName":"神崎隆二" , "cv" : null , "age": null ,"gender" : 2,"birthday": null , "height" : null  ,
             "abilities":{ "learn" : null , "intel" : null , "judgement" : null , "sport": null, "coop": null }}
         ]
     },{

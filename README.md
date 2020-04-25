@@ -1,5 +1,9 @@
 # dson.js
-declarative operation encapsulation for json
+declarative operation encapsulation for json  
+DSL for json
+
+## 功能
+1. 
 
 ## just to it
 ```bash

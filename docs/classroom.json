@@ -1,0 +1,55 @@
+{
+    "name" : "Classroom of the Elite",
+    "cnName" : "欢迎来到实力至上主义的教室",
+    "jpName" : "ようこそ実力至上主義の教室へ",
+    "about" : "几乎百分之百实现升学与就业的全国首屈一指的名校──高度育成高中。这间学校使用了最先进的设备，而且每个月还会给予学生价值10万日元的点数，也允许自由选择发型和携带私人物品。简直就是一个乐园般的学校。 \n然而其真面目却是——\n唯有优秀者才能享受优待的实力至上主义学校。因为某些理由而在入学考试中故意放水后，主人公·绫小路清隆被分配到聚集了问题学生的最底层班级·D班，在那里，他遇见了成绩优异但性格却有大问题的美少女·堀北铃音，以及由体贴与温柔所构成的天使般的少女·栉田桔梗。与她们的相遇，使清隆的态度逐渐产生改变。",
+    "classrooms" :[{
+        "name" :"A",
+        "students" : [
+            { "name":"Arisu Sakayanagi" , "cnName":"坂柳有栖" , "cv" : "日高里菜" , "age":16 ,"gender" : 2,"birthday":"3.12" , "height" : 150 , "BWH":"B70 W54 H77" ,
+            "abilities":{ "learn" : "A" , "intel" : "A" , "judgement" : "A" , "sport": "E-" , "coop": "C+" }},
+            { "name":"Kōhei Katsuragi" , "cnName":"葛城康平" , "cv" : "日野聪" , "age": null ,"gender" : 1,"birthday":"8.29" , "height" : 180 , 
+            "abilities":{ "learn" : "A" , "intel" : "A" , "judgement" : "B" , "sport": "C" , "coop": "B-" } , "firends":[ "户冢弥彦","绫小路清隆"]}
+        ]
+    },{
+        "name": "B",
+        "students":[
+             { "name":"Ichinose Honami" , "cnName":"一之濑帆波" , "cv" : "东山奈央" , "age":16 ,"gender" : 2,"birthday":"7.20" , "height" : 159 , "BWH":"B95 W61 H91" ,
+            "abilities":{ "learn" : "B+" , "intel" : "A" , "judgement" : "B" , "sport": "C" , "coop": "A-" }},
+             { "name":"神崎隆二" , "cnName":"神崎隆二" , "cv" : "xxxxxxxx" , "age": null ,"gender" : 2,"birthday": null , "height" : null  ,
+            "abilities":{ "learn" : null , "intel" : null , "judgement" : null , "sport": null, "coop": null }}
+        ]
+    },{
+        "name": "C",
+        "students":[
+             { "name":"Ibuki Mio" , "cnName":"伊吹澪" , "cv" : "小松未可子" , "age":16 ,"gender" : 2,"birthday":"7.27" , "height" : 159 , "BWH":"B73 W54 H78" ,
+            "abilities":{ "learn" : "C" , "intel" : "C" , "judgement" : "B-" , "sport": "B" , "coop": "E" }},
+             { "name":"Kakeru Ryūen" , "cnName":"龙园翔" , "cv" : "水中雅章" , "age":16 ,"gender" : 1,"birthday":"10.20" , "height" : 183 ,
+            "abilities":{ "learn" : "D" , "intel" : "B" , "judgement" : "A" , "sport": "B" , "coop": "E-" }},
+             { "name":"Shiina Hiyori" , "cnName":"椎名日和" , "cv" : null , "age":16 ,"gender" :2,"birthday":"1.21" , "height" : null , "BWH": null ,
+            "abilities":{ "learn" : "A-" , "intel" : "A-" , "judgement" : "E" , "sport": "E" , "coop": "D" }}
+        ]
+    },{
+        "name": "D",
+        "students":[
+             { "name":"Kiyotaka Ayanokouji" , "cnName":"绫小路清隆" , "cv" : "千叶翔也" , "age":16 ,"gender" : 1,"birthday":"10.20" , "height" : 176 , 
+            "abilities":{ "learn" : "C" , "intel" : "C-" , "judgement" : "C-" , "sport": "C-" , "coop": "D" }},
+             { "name":"Horikita Suzune" , "cnName":"堀北铃音" , "cv" : "鬼头明里" , "age":16 ,"gender" : 2,"birthday":"2.15" , "height" : 156 , "BWH":"B79 W54 H79" ,
+            "abilities":{ "learn" : "A" , "intel" : "A-" , "judgement" : "B-" , "sport": "B+" , "coop": "E" }},
+             { "name":"Kikyou Kushida" , "cnName":"栉田桔梗" , "cv" : "久保由利香" , "age":16 ,"gender" : 2,"birthday":"1.23" , "height" : 155 , "BWH":"B82 W55 H83" ,
+            "abilities":{ "learn" : "B" , "intel" : "B-" , "judgement" : "C+" , "sport": "B" , "coop": "A" }},
+            { "name":"Karuizawa Kei" , "cnName":"轻井泽惠" , "cv" : "竹达彩奈" , "age":16 ,"gender" : 2,"birthday":"3.8" , "height" : 154 , "BWH":"B76 W54 H77" ,
+            "abilities":{ "learn" : "D-" , "intel" : "D-" , "judgement" : "C-" , "sport": "D" , "coop": "E+" }},
+            { "name":"Sakura Airi" , "cnName":"佐仓爱里" , "cv" : "MAO" , "age":16 ,"gender" : 2,"birthday":"10.15" , "height" : 153 , "BWH":"B96 W60 H90" ,
+            "abilities":{ "learn" : "C+" , "intel" : "C" , "judgement" : "D" , "sport": "D" , "coop": "D-" }},
+            { "name":"Yousuke Hirata" , "cnName":"平田洋介" , "cv" : "逢坂良太" , "age":16 ,"gender" : 1,"birthday":"9.1" , "height" : 174 , 
+            "abilities":{ "learn" : "B" , "intel" : "B" , "judgement" : "B+" , "sport": "B" , "coop": "A-" }},
+            { "name":"Rokusuke Kouenji" , "cnName":"高圆寺六助" , "cv" : "岩泽俊树" , "age":16 ,"gender" : 1,"birthday":"4.3" , "height" : 181 , 
+            "abilities":{ "learn" : "A" , "intel" : "A" , "judgement" : "A" , "sport": "A" , "coop": "E-" }},
+            { "name":"Ken Sudou" , "cnName":"须藤健" , "cv" : "竹内荣治" , "age":16 ,"gender" : 1,"birthday":"10.5" , "height" : 183 ,
+            "abilities":{ "learn" : "E" , "intel" : "E" , "judgement" : "D+" , "sport": "A" , "coop": "D" }},
+            { "name":"Haruka Hasebe" , "cnName":"长谷部波瑠加" , "cv" : "巽悠衣子" , "age":16 ,"gender" : 1,"birthday":"11.5" , "height" : null, "BWH": null,
+            "abilities":{ "learn" : "D" , "intel" : "C+" , "judgement" : "C+" , "sport": "D" , "coop": "D" }}
+        ]
+    }]
+}

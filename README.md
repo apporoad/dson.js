@@ -46,7 +46,8 @@ npm i -g vuepress
 
 cd demo
 
-vuepress build  -d docs/
+vuepress build pages -d temp
 
+cp  -rf temp/*  docs/
 
 ```

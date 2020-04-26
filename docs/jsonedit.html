@@ -2,8 +2,7 @@
 <html>
 
 <head>
-    <title>JSONEditor | Switch mode</title>
-
+    <title>JSONEditor</title>
     <!-- when using the mode "code", it's important to specify charset utf-8 -->
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 
@@ -11,11 +10,12 @@
     <script src="jsoneditor/jsoneditor.min.js"></script>
 
     <style type="text/css">
-        html{
-        height:100%;
-        margin: 0;
-padding: 0;
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
+
         body {
             font: 10.5pt arial;
             color: #4d4d4d;
@@ -23,7 +23,7 @@ padding: 0;
             width: 100%;
             height: 100%;
             margin: 0;
-padding: 0;
+            padding: 0;
         }
 
         code {
@@ -44,6 +44,8 @@ padding: 0;
     <script>
         const container = document.getElementById('jsoneditor')
 
+        var storage = window.localStorage
+
         const options = {
             mode: 'tree',
             modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
@@ -52,20 +54,19 @@ padding: 0;
             },
             onModeChange: function (newMode, oldMode) {
                 console.log('Mode switched from', oldMode, 'to', newMode)
+            },
+            onChange: function () {
+                var tempJson = JSON.stringify(editor.get())
+                if (cache != tempJson) {
+                    //alert('changed')
+                    storage.setItem('jsonedit', tempJson)
+                    cache = tempJson
+                }
             }
         }
 
-        const json = {
-            "array": [1, 2, 3],
-            "boolean": true,
-            "null": null,
-            "number": 123,
-            "object": {
-                "a": "b",
-                "c": "d"
-            },
-            "string": "Hello World"
-        }
+        var cache = storage.getItem('jsonedit')
+        var json = cache ? JSON.parse(cache) : {}
 
         const editor = new JSONEditor(container, options, json)
     </script>

@@ -36,3 +36,17 @@ npm i --save dson.js
 3. 对数据做校验
 4. format json
 5. 神奇的使用
+
+
+
+## 文档
+
+```bash
+npm i -g vuepress
+
+cd demo
+
+vuepress build  -d docs/
+
+
+```

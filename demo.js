@@ -5,8 +5,8 @@ const JVD = j = J = require('./index').JVD
 
 //var it2 = global.debug || it
 
-var fateJson = require('./docs/fate.json')
-var classroomJson = require('./docs/classroom.json')
+var fateJson = require('./pages/fate.json')
+var classroomJson = require('./pages/classroom.json')
 
 
 //  1.  找到出现在多个游戏中的servant

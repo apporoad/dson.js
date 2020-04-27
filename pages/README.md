@@ -73,9 +73,22 @@ dson().find(null,/.*Shirou.*/g)
 
 ```
 
+### 模板查询 select
+
+方法： select/draw/get   <button onclick="demo('template')"> just try it </button>
+
+```js
+dson().select({
+    hello: 'world',
+    name : '${_d.name}',
+    gameName : 'games name is ${_d.games[0].name}'
+})
+/* =>  {"hello":"world","name":"圣杯战争","gameName":"games name is fate stay night"}
 
 
-### 模板查询 doSelect
+```
+
+
 
 ### 链式操作 chain opreation
 

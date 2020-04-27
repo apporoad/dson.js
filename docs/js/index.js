@@ -92,5 +92,12 @@ function demo(name){
   v = dson().find((key,value) =>{ return value &&  value.height && value.height == 167})
   v = dson().find(null,/.*Shirou.*/g)`)
             break
+          case 'template':
+            openEdit(`  v =dson().select({
+    hello: 'world',
+    name : '\${_d.name}',
+    gameName : 'games name is \${_d.games[0].name}'
+	})`)
+            break
     }
 }

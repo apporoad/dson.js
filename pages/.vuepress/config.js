@@ -1,7 +1,6 @@
 module.exports = {
-    head: [ ['script', {}, `
-        function abc (){
-        alert('abc')
-    }
- `]]
+    head: [
+        ['script', { src: 'js/index.js' , type :  "text/javascript"}],
+        ['link' , { href : 'css/index.css' , rel : "stylesheet"}]
+    ]
 }

@@ -48,6 +48,7 @@ cd demo
 
 vuepress build pages -d temp
 
+rm -rf docs/assets/
 cp  -rf temp/*  docs/
 
 ```

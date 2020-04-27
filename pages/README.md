@@ -12,12 +12,68 @@
 8. 简单集合操作
 
 
-<button onclick="abc()"> just try it </button>
 
 
 ## 常用场景
 
 ### 查询操作
+
+原始json如下： 
+
+```js
+{
+  "name": "圣杯战争",
+  "about": "Fate",
+  "games": [
+    {
+      "name": "fate stay night",
+      "masters": [
+        {
+          "name": "Shirou Emiya",
+          "cnName": "卫宫士郎",
+          "cv": "杉山纪彰",
+          "height": 167,
+          "weight": 58,
+          "remark": "",
+          "magics": [
+            "投影"
+          ]
+        }
+      ],
+      "servants": [{ ...}]
+    }
+  ]
+}
+```
+
+#### 获取值 get
+
+方法： select/draw/get   实现同[LiSA.json](https://github.com/apporoad/LiSA.json)中get方法  <button onclick="demo('select')"> just try it </button>
+
+```js 
+dson().get('name')   => '圣杯战争'
+dson('name')   =>  '圣杯战争'
+dson().get('games[0].name') => 'fate stay night'
+dson().get('games[].name') => ['fate stay night']
+```
+
+#### 寻找值 find
+
+方法：  find    实现同[LiSA.json](https://github.com/apporoad/LiSA.json) 中find方法  <button onclick="demo('find')"> just try it </button>
+
+```js
+dson().find('name') 
+    // =>  ["圣杯战争" , "fate stay night" , "Shirou Emiya" ...]
+dson().find(/.*eight/g) 
+    // => [167,58,154,42]
+dson().find((key,value) =>{ return value &&  value.height && value.height == 167}) 
+	// => [{"name":"Shirou Emiya","cnName":"卫宫士郎",...}]
+dson().find(null,/.*Shirou.*/g)
+	// => ["Shirou Emiya"]
+
+```
+
+
 
 ### 模板查询 doSelect
 

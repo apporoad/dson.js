@@ -39,16 +39,3 @@ npm i --save dson.js
 
 
 
-## 文档
-
-```bash
-npm i -g vuepress
-
-cd demo
-
-vuepress build pages -d temp
-
-rm -rf docs/assets/
-cp  -rf temp/*  docs/
-
-```

@@ -315,5 +315,17 @@ function demo(name){
       cv : '\${get.cv}'
   })`)
             break
+          case 'collection':
+            openEdit(`v =	dson('games').count()
+  v = dson('games[].masters').first().get('name')	
+  v = dson('games[].masters').last(2).get('[]name')	
+  v = dson('games[].masters').random(2).get('[]name')
+  v = dson('games[].masters').top(2).get('[]cnName')
+  v = dson('games[].masters[]name').order()
+  v = dson('games[].masters[].weight').sum()
+  v = dson('games[].masters[].weight').avg()
+  v = dson('games[].masters[].weight').max()
+  v = dson('games[].masters[].weight').min()`,fate)
+              break
     }
 }

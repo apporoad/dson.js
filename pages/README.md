@@ -130,18 +130,27 @@ ps: 其中 '${get.cv}' 用了autoMark，get的值即get('masters[0]')中的方�
 
 ### 集合操作
 
-集合操作原始json 采用 [fate.json](https://apporoad.github.io/dson.js/js/fate.json)
+集合操作原始json 采用 [fate.json](https://apporoad.github.io/dson.js/js/fate.json)  <button onclick="demo('collection')"> just try it </button>
 
 ```js
 dson('games').count()  //=> 2
 dson('games[].masters').first().get('name')		//=>"Shirou Emiya"
 dson('games[].masters').last(2).get('[]name')	//=>["Matou Kariya","Uryū Ryūnosuke"]
 dson('games[].masters').random(2).get('[]name')	 // =>  .... 随机2个
+dson('games[].masters').top(2).get('[]cnName') // => ["卫宫士郎","远坂凛"]
+dson('games[].masters[]name').order() // => ["Emiya Kiritsugu","Illyasviel von Einzbern","Kayneth El-Melloi Archibaldu","Kirei Kotomine" ....]
+dson('games[].masters[].weight').sum()  // => 774
+dson('games[].masters[].weight').avg() // =>59.53846153846154
+dson('games[].masters[].weight').max() // => 83
+dson('games[].masters[].weight').min() // => 34
+
 ```
 
-
-
 ### 筛选操作 filter
+
+方法：  filter/where <button onclick="demo('where')"> just try it </button>
+
+
 
 ### doTest
 

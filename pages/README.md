@@ -46,7 +46,7 @@
 }
 ```
 
-#### 获取值 get
+1. 获取值 get
 
 方法： select/draw/get   实现同[LiSA.json](https://github.com/apporoad/LiSA.json)中get方法  <button onclick="demo('select')"> just try it </button>
 
@@ -57,7 +57,7 @@ dson().get('games[0].name') => 'fate stay night'
 dson().get('games[].name') => ['fate stay night']
 ```
 
-#### 寻找值 find
+2. 寻找值 find
 
 方法：  find    实现同[LiSA.json](https://github.com/apporoad/LiSA.json) 中find方法  <button onclick="demo('find')"> just try it </button>
 
@@ -83,22 +83,67 @@ dson().select({
     name : '${_d.name}',
     gameName : 'games name is ${_d.games[0].name}'
 })
-/* =>  {"hello":"world","name":"圣杯战争","gameName":"games name is fate stay night"}
+// =>  {"hello":"world","name":"圣杯战争","gameName":"games name is fate stay night"}
 
 
 ```
 
+### json格式化 format
 
+方法：  format/render/select/draw/get  <button onclick="demo('format')"> just try it </button>
+
+```js
+dson().format({
+    hello :'++${world}++',
+    name : '${_d.name}'
+}, { world : "hello hello good day"})
+// => {"hello":"++hello hello good day++","name":"圣杯战争"}
+```
 
 ### 链式操作 chain opreation
 
+<button onclick="demo('chain')"> just try it </button>
+
+```js
+dson('games').select('[0]').select({
+    hello : 'good good day',
+    name : '${_d.name}'
+})
+// => {"hello":"good good day","name":"fate stay night"}
+```
+
+### 锚点功能 mark & autoMark
+
+方法：  mark  <button onclick="demo('mark')"> just try it </button>
+
+```js
+dson().get('games[0]').mark('stayNight').get('masters[0]').select({
+      name : 'master name is ${_d.name}',
+      heigth : '${_d.height}',
+      gameName : '${stayNight.name}',
+      cv : '${get.cv}'
+  })
+//=>{"name":"master name is Shirou Emiya","heigth":167,"gameName":"fate stay night","cv":"杉山纪彰"}
+```
+
+ps: 其中 '${get.cv}' 用了autoMark，get的值即get('masters[0]')中的方法名，默认取值为最后一次该方法名的调用结果
+
 ### 集合操作
+
+集合操作原始json 采用 [fate.json](https://apporoad.github.io/dson.js/js/fate.json)
+
+```js
+dson('games').count()  //=> 2
+dson('games[].masters').first().get('name')		//=>"Shirou Emiya"
+dson('games[].masters').last(2).get('[]name')	//=>["Matou Kariya","Uryū Ryūnosuke"]
+dson('games[].masters').random(2).get('[]name')	 // =>  .... 随机2个
+```
+
+
 
 ### 筛选操作 filter
 
 ### doTest
-
-### format
 
 ### 嵌套操作
 

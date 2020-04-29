@@ -256,6 +256,7 @@ var openEdit = (dson,json)=>{
 
     storage.setItem('CodeHere_jsStr',`var DSONJS= require('dson.js')
 var d = D = DSON = dson = DSONJS.DSON
+var j = J = jvd = JVD = DSONJS.JVD
 exports = function(){
   var v = null
   ${dson}

@@ -2,6 +2,7 @@
 
 类似[JMESPath](https://jmespath.org/) ,但更偏向于二次扩展及声明方式表达对json的操作。  
 设计目标：  
+
 1. 二次开发使用
 2. json数据抽取
 3. 数据逻辑链式调用
@@ -226,6 +227,24 @@ dson('games[0].masters[]').where((data,context)=>{
 
 
 ### 常用重要命令
+
+方法： print/debug  <button onclick="demo('common')"> just try it </button>
+
+```js
+dson().get('name').push('names')
+  	.root().get('games[].name').push('names')
+  	.goto('names').print().get('[0]').mark('m1')
+  	.root().select({ love : ' world '}).mark('m2').debug(data=>{
+  		alert(JSON.stringify(data))
+  	}).select({
+  		hello : 'hello hello good ${m2.love}',
+    	names : '${names}',
+    	hi : '${m1}'
+  	})
+//=> {"hello":"hello hello good  world ","names":["圣杯战争",["fate stay night","Fate/Zero"]],"hi":"圣杯战争"}
+```
+
+### 扩展
 
 
 

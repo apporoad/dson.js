@@ -122,3 +122,5 @@ demo/
 pages/
 
 temp/
+
+*.md

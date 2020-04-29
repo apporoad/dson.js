@@ -370,6 +370,18 @@ function demo(name){
   	return data.height > 166 && data.weight < 60
   }).get('[]name')`,fate)
             break
+        case 'common':
+            openEdit(`v = dson().get('name').push('names')
+  	.root().get('games[].name').push('names')
+  	.goto('names').print().get('[0]').mark('m1')
+  	.root().select({ love : ' world '}).mark('m2').debug(data=>{
+  		alert(JSON.stringify(data))
+  	}).select({
+  		hello : 'hello hello good \${m2.love}',
+    	names : '\${names}',
+    	hi : '\${m1}'
+  	})`,fate)
+            break
 
     }
 }

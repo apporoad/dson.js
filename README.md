@@ -28,7 +28,7 @@ npm i --save dson.js
 1. 执行的服务器客户端模式 dson server
 2. servants   saber
 3. 语言嵌套
-4. serialize
+4. serialize https://github.com/apporoad/dson.parser.js.git
 5. format jvd  如 '>${a.b}'
 6. webdrive 自动化测试
 7. render   ' asdf ${a}sdf'

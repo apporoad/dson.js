@@ -31,6 +31,7 @@ npm i --save dson.js
 4. serialize
 5. format jvd  如 '>${a.b}'
 6. webdrive 自动化测试
+7. render   ' asdf ${a}sdf'
 
 
 # 细节场景

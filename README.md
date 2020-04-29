@@ -29,6 +29,9 @@ npm i --save dson.js
 2. servants   saber
 3. 语言嵌套
 4. serialize
+5. format jvd  如 '>${a.b}'
+6. webdrive 自动化测试
+
 
 # 细节场景
 1. 抽出数据

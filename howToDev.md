@@ -10,6 +10,7 @@ vuepress build pages -d temp
 
 rm -rf docs/assets/
 cp  -rf temp/*  docs/
+sed -i 's/\/assets/assets/g' docs/index.html
 
 ```
 

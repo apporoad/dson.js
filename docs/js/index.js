@@ -295,19 +295,19 @@ function demo(name){
     gameName : 'games name is \${_d.games[0].name}'
 	})`)
             break
-          case 'format':
+        case 'format':
             openEdit(`v = dson().format({
     	hello :'++\${world}++',
     	name : '\${_d.name}'
 		}, { world : "hello hello good day"})`)
             break
-          case 'chain':
+        case 'chain':
             openEdit(`v = dson('games').select('[0]').select({
       hello : 'good good day',
       name : '\${_d.name}'
   })`)
             break
-          case 'mark':
+        case 'mark':
             openEdit(`v =	dson().get('games[0]').mark('stayNight').get('masters[0]').select({
       name : 'master name is \${_d.name}',
       heigth : '\${_d.height}',
@@ -315,7 +315,7 @@ function demo(name){
       cv : '\${get.cv}'
   })`)
             break
-          case 'collection':
+        case 'collection':
             openEdit(`v =	dson('games').count()
   v = dson('games[].masters').first().get('name')	
   v = dson('games[].masters').last(2).get('[]name')	
@@ -327,5 +327,48 @@ function demo(name){
   v = dson('games[].masters[].weight').max()
   v = dson('games[].masters[].weight').min()`,fate)
               break
+        case 'expect' : 
+            openEdit(`v = dson('games[0].masters').count().expect('=6')
+  v = dson('games[0].masters').count().test('>5&&<7')
+  v = dson('games[0].masters').count().test(JVD('>6'))
+  v = dson('games[0].masters').count().test(JVD().gt(5).lt(7))
+  v = dson('games[0].masters').count().test(JVD('>6').or().lt(7))
+  v = dson('games[0]').mark('mark1').get('name').test("='fate stay night'")
+    	.goto('mark1').get('masters').count().test(JVD('>7'))
+  v = dson('games[0]').test(dson().get('name').test("='1'").root().get('masters').test('=6'))
+  v = dson('games[0]').test(JVD().$(dson().get('name').test('=1'))
+                            .or().$(dson('masters').count().test('=6')))
+  v = dson('games[0]').test({
+  		name : "='fate stay night'",
+    	masters : DSON().count().test('=6')
+  	})
+  
+  //more awesome
+  v = dson('games[0]').test({
+  		name : "='fate stay night'",
+    	masters : [{
+      	height : '>158'
+      }]
+  	})
+  
+  //function
+  v = dson('games[0]').test(async (data,context)=>{
+  	return data.name == 'fate stay night'  && data.masters[0].height > 158
+  })`,fate)
+            break
+        case 'where':
+            openEdit(`v = dson('games[0].masters[]height').filter('>166')
+  v = dson('games[0].masters[]').where(dson('height').test('>166')).get('[]name')
+  v = dson('games[0].masters[]').where(dson('height').test('>166'))
+  	.where(dson('weight').test('<60')).get('[]name')
+  v = dson('games[0].masters[]').where({
+  	height : '>166',
+    weight : '<60'
+  }).get('[]name')
+  v = dson('games[0].masters[]').where((data,context)=>{
+  	return data.height > 166 && data.weight < 60
+  }).get('[]name')`,fate)
+            break
+
     }
 }

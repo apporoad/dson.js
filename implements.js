@@ -32,6 +32,8 @@ exports.find = async (context, keyOrFilter, value) => {
         reals.push(val.value)
     })
     context.currentData = context.tempData = reals
+
+    //todos find jvd or dson
 }
 
 exports.root = (context) => {
@@ -535,3 +537,7 @@ exports.debug= async (context,fn)=>{
         await Promise.resolve(fn(context.tempData,context))
     }
 }
+
+
+//todo
+exports.mirror = exports.clone 

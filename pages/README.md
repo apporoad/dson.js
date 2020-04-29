@@ -146,13 +146,88 @@ dson('games[].masters[].weight').min() // => 34
 
 ```
 
+### 判断校验 expect
+
+方法： expect/test 	 <button onclick="demo('expect')"> just try it </button>
+
+```js
+dson('games[0].masters').count().expect('=6')   // => true
+dson('games[0].masters').count().test('>5&&<7') // => true
+dson('games[0].masters').count().test(JVD('>6'))  //=> false
+dson('games[0].masters').count().test(JVD().gt(5).lt(7)) //=>false
+dson('games[0].masters').count().test(JVD('>6').or().lt(7)) //=> true
+dson('games[0]').mark('mark1').get('name').test("='fate stay night'")
+    	.goto('mark1').get('masters').count().test(JVD('>7'))
+	//=> false
+
+dson('games[0]').test(dson().get('name').test("='1'").root().get('masters').test('=6'))
+	//=> false
+
+dson('games[0]').test(JVD().$(
+    	dson().get('name').test('=1')
+	).or().$(
+		dson('masters').count().test('=6')
+	))
+	//=> true
+
+
+//awesome
+dson('games[0]').test({
+  		name : "='fate stay night'",
+    	masters : DSON().count().test('=6')
+  	})
+	//=> true
+
+//more awesome
+dson('games[0]').test({
+        name : "='fate stay night'",
+        masters : [{
+            height : '>158'
+        }]
+    })
+	//=> fasle
+
+//function or async function
+dson('games[0]').test(async (data,context)=>{
+  	return data.name == 'fate stay night'  && data.masters[0].height > 158
+  })
+	//=> true
+
+```
+
+校验的规则基于jvd.js , 具体使用详见[jvd]()
+
 ### 筛选操作 filter
 
 方法：  filter/where <button onclick="demo('where')"> just try it </button>
 
+```js
+dson('games[0].masters[]height').filter('>166')  //=>[167,167,193]
+dson('games[0].masters[]').where(dson('height').test('>166')).get('[]name')
+	//=>["Shirou Emiya","Shinji Matou","Kirei Kotomine"]
+
+dson('games[0].masters[]').where(dson('height').test('>166'))
+  	.where(dson('weight').test('<60')).get('[]name')
+	//=> ["Shirou Emiya","Shinji Matou"]
+
+//模板方式
+dson('games[0].masters[]').where({
+  	height : '>166',
+    weight : '<60'
+  }).get('[]name')
+	//=>["Shirou Emiya","Shinji Matou"]
+
+dson('games[0].masters[]').where((data,context)=>{
+  	return data.height > 166 && data.weight < 60
+  }).get('[]name')
+	//=>["Shirou Emiya","Shinji Matou"]
+```
 
 
-### doTest
+
+### 常用重要命令
+
+
 
 ### 嵌套操作
 

@@ -686,10 +686,7 @@ it('test order',async()=>{
 })
 
 
-//todo test info
-it2('test test info',async ()=>{
-	
-
+it('test test info',async ()=>{
 	//寻找美女的名字
 	expect((await d('data').where(JVD().$(d('profile.nice').test('>95')).or()
 		.$(d('profile.height').expect('?(164,170)')).$(d('profile.weight').expect('?(45,55)'))).count().test('>3','美女的数量不大于三个')
@@ -699,7 +696,33 @@ it2('test test info',async ()=>{
 			//console.log(context)
 		})
 		.doTest(testJson))).toBe(false)
+})
 
 
+it2('test set', async()=>{
+// very todo
+	var json = {
+		hello : 1,
+		arr : [
+			{ name : 'lisa' ,  age : 32},
+			{ name : 'aoer' , age : 30},
+			{ name : 'luna' , age : 28}
+		]
+	}
 
+	expect((await d().set('hello',null, 3).doDraw(json)).hello).toBe(3)
+	var r = await d().set(/.*age/g ,null , (p)=>{ 
+		 return p.value + 2
+		} ).mark('d1')
+			.root().mark('d2').get('arr').set(null, /lisa/g , d('age').mark('d3').select( { ages : 'age is ${d3}'})).mark('d4')
+			.select({
+				d1 : "${d1}",
+				d2 : '${d2}',
+				d3 : '${d3}',
+				d4 : '${d4}'
+			}).doDraw(json)
+	  expect(r.d1.arr[0].age).toBe(34)
+	  expect(r.d2.arr[0].age).toBe(32)
+	  expect(r.d3).toBe(32)
+	  expect(r.d4[0].name.ages).toBe('age is 32')
 })

@@ -89,6 +89,16 @@ dson().select({
 
 ```
 
+### 赋值操作 Set
+
+方法 :  findAndSet / set  
+
+```js
+todo
+```
+
+
+
 ### json格式化 format
 
 方法：  format/render/select/draw/get  <button onclick="demo('format')"> just try it </button>

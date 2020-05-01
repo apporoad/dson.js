@@ -78,6 +78,22 @@ declare class DSON {
     find(keyOrFilter, value ? ): DSON
 
     /**
+     * 
+     * @param keyOrFilter 
+     * @param value 
+     * @param valueOrDsonOrFunction 
+     */
+    findAndSet(keyOrFilter? , value ? , valueOrDsonOrFunction) : DSON
+
+    /**
+     *  赋值操作
+     * @param keyOrFilter  参考 find方法
+     * @param value     参考find方法
+     * @param valueOrDsonOrFunction  赋予的值，可以是直接值，可以是DSON，可以是函数返回值，如果直接赋予函数时，请用函数返回函数实现
+     */
+    set(keyOrFilter? , value ? , valueOrDsonOrFunction) : DSON
+
+    /**
      * 回到根路径
      */
     root(): DSON

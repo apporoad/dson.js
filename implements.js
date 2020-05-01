@@ -23,7 +23,7 @@ exports.find = async (context, keyOrFilter, value) => {
     } else if (utils.Type.isArray(json)) {
         for (var i = 0; i < json.length; i++) {
             var element = json[i]
-            var r = await ljson(element).find(keyOrFilter, values) || []
+            var r = await ljson(element).find(keyOrFilter, value) || []
             values = values.concat(r)
         }
     }
@@ -32,8 +32,53 @@ exports.find = async (context, keyOrFilter, value) => {
         reals.push(val.value)
     })
     context.currentData = context.tempData = reals
+}
 
-    //todos find jvd or dson
+var innerSet = async (json ,  positions , valueOrDsonOrFunction , context)=>{
+    var value = valueOrDsonOrFunction
+    // dson 情况
+    if(uType.isObject(valueOrDsonOrFunction) && uType.isFunction(valueOrDsonOrFunction.isDSON) && valueOrDsonOrFunction.isDSON()){
+        value = await  valueOrDsonOrFunction.doDraw(json , { context : context})
+    }
+    for(var i =0 ;i < positions.length;i++){
+        var p = positions[i]
+        //函数情况
+         if(uType.isFunction(valueOrDsonOrFunction) || uType.isAsyncFunction(valueOrDsonOrFunction)){
+                value = await Promise.resolve(valueOrDsonOrFunction( p ,json , context))
+           }
+           ljson(json).set(p.jrl , value)
+    }
+}
+
+exports.set = exports.findAndSet = async (context, keyOrFilter, value,  valueOrDsonOrFunction) => {
+    /*[ { jrl: 'name', key: 'name', value: 'apporoad' },
+     { jrl: 'loves[0].name', key: 'name', value: 'final fanstasy' },
+     { jrl: 'loves[1].name', key: 'name', value: 'dq' },
+     { jrl: 'loves[2].name', key: 'name', value: 'LiSA' } ] */
+    var json = context.currentData
+    var values = []
+    if (utils.Type.isObject(json)) {
+        values = (await ljson(json).find(keyOrFilter, value)) || []
+        if(values.length >0 ){
+            var fjson = utils.deepCopy(json)
+             await innerSet(fjson , values , valueOrDsonOrFunction,context)
+            context.currentData = context.tempData =  fjson
+        }
+    } else if (utils.Type.isArray(json)) {
+        var arr = []
+        for (var i = 0; i < json.length; i++) {
+            var element = json[i]
+            var r = await ljson(element).find(keyOrFilter, value) || []
+            if(r.length>0){
+                var fjson = utils.deepCopy(element)
+                await innerSet(fjson,r, valueOrDsonOrFunction,context)
+                arr.push(fjson)
+            }else{
+                arr.push(element)
+            }
+        }
+        context.currentData = context.tempData = arr
+    }
 }
 
 exports.root = (context) => {

@@ -1,6 +1,6 @@
 {
   "name": "dson.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "declarative operation encapsulation for json",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,8 @@
   "homepage": "https://github.com/apporoad/dson.js#readme",
   "dependencies": {
     "jvd.js": "^1.2.1",
-    "lisa.json": "^1.3.0",
-    "lisa.utils": "^1.3.2",
+    "lisa.json": "^1.3.1",
+    "lisa.utils": "^1.3.3",
     "lustjson.js": "^2.2.0"
   },
   "devDependencies": {

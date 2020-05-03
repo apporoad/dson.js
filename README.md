@@ -34,6 +34,7 @@ npm i --save dson.js
 5. format jvd  如 '>${a.b}'
 6. webdrive 自动化测试
 7. render   ' asdf ${a}sdf'
+8. add  dson  verbose   打出每一步的执行结果
 
 
 # 细节场景

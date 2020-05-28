@@ -699,7 +699,7 @@ it('test test info',async ()=>{
 })
 
 
-it2('test set', async()=>{
+it('test set', async()=>{
 // very todo
 	var json = {
 		hello : 1,
@@ -714,7 +714,9 @@ it2('test set', async()=>{
 	var r = await d().set(/.*age/g ,null , (p)=>{ 
 		 return p.value + 2
 		} ).mark('d1')
-			.root().mark('d2').get('arr').set(null, /lisa/g , d('age').mark('d3').select( { ages : 'age is ${d3}'})).mark('d4')
+			.root().mark('d2').debug((d,ctx)=>{
+				//console.log(ctx)
+			}).get('arr').set(null, /lisa/g , d('age').mark('d3').select( { ages : 'age is ${d3}'})).mark('d4')
 			.select({
 				d1 : "${d1}",
 				d2 : '${d2}',

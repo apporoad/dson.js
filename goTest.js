@@ -21,3 +21,5 @@ global.debug = global.debug || it2
 require('./test')
 
 require('./utils.test')
+
+require('./bug.test')

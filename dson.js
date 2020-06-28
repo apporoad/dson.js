@@ -1,6 +1,23 @@
 const utils = require('lisa.utils')
 const uType = utils.Type
 
+/**
+ * 将数组变化为单向链表
+ * @param {*} array 
+ */
+const arrayToChainList= (array)=>{
+    if(array&& array.length && array.length>0){
+        var chain = { data : array[0]}
+        var current =chain
+        for(var i = 1;i<array.length;i++){
+            current.next ={ data :  array[i]}
+            current = current.next
+        }
+        return chain
+    }
+    return null
+}
+
 function DSON() {
     var _this = this
     this._implements = {}
@@ -75,9 +92,13 @@ function DSON() {
             await Promise.resolve(_this._implements['select'].apply(_this, [context,_this.selector]))
             context.root = context.currentData
         }
-        for (var index = 0; index < _this._queue.length; index++) {
-            var current = _this._queue[index]
+        //链表化，为了不污染正常队列，并支持动态添加节点
+        var currentObj =  arrayToChainList(_this._queue)
+        while(currentObj){
+            var current = currentObj.data
             var pureParams = current.params.length>0 ? current.params : ([]) //this.defaultParams  
+            //上下文添加当前链表节点，用于cross动态添加node
+            context.currentChainNode = currentObj
             var params = [context].concat(pureParams)
             await Promise.resolve(_this._implements[current.item].apply(_this, params))
             if (current.item != 'mark') {
@@ -94,8 +115,9 @@ function DSON() {
                 params : params,
                 value: context.tempData
             })
-        }
 
+            currentObj = currentObj.next
+        }
         return context
     }
     this.doTest = async (data, options) => {

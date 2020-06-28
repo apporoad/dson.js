@@ -585,4 +585,21 @@ exports.debug= async (context,fn)=>{
 
 
 //todo
-exports.mirror = exports.clone 
+exports.mirror = exports.clone
+
+//穿越实现
+exports.X = exports.x = exports.cross = async(context, meta)=>{
+    //context.currentChainNode
+
+    //加载缓存
+
+    // 如果有缓存，判断缓存是否有效
+    
+    //加载dsonserver
+
+    //加载本地global
+}
+
+//本地全局化
+exports.global 
+//globalThis

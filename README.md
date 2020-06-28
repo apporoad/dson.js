@@ -35,7 +35,8 @@ npm i --save dson.js
 6. webdrive 自动化测试
 7.  [ok]  render   ' asdf ${a}sdf'
 8. add  dson  verbose   打出每一步的执行结果
-9. 
+9. 支持cross 、x ，表示dson穿越，加载全局dson， 支持global，全局注册dson
+10. 在cross中需要支持远程调用和缓存，需要找到默认实现
 
 
 # 细节场景

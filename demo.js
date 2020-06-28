@@ -2,7 +2,6 @@
 const d = D = DSON = require('./index').DSON
 const JVD = j = J = require('./index').JVD
 
-
 //var it2 = global.debug || it
 
 var fateJson = require('./pages/fate.json')

@@ -73,7 +73,8 @@ function DSON() {
             history: [],
             position: [],
             test : [],
-            JVD : _this.JVD
+            JVD : _this.JVD,
+            this : _this   //用于如 global等注册操作
         }
         //串上下文情况 ,只有mark autoMarks history进行传递
         if(options && uType.isObject(options.context)){

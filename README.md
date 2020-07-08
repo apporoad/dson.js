@@ -3,12 +3,70 @@ declarative operation encapsulation for json
 DSL for json
 
 ## 功能
-1. 
-
 ## just to it
 ```bash
 npm i --save dson.js
 ```
+```js
+
+var DSONJS= require('dson.js')
+var d = D = DSON = dson = DSONJS.DSON
+var j = J = jvd = JVD = DSONJS.JVD
+
+var v = null
+//define dson
+v =	dson('games').count()
+v = dson().get('name') 
+//v = dson('name') 
+//v = dson().get('games[0].name') 
+//v = dson().select('games[0].name') 
+//v = dson().draw('games[0].name') 
+//v = dson().get('games[].name'))
+v = dson('games[0]').test({
+  		name : "='fate stay night'",
+    	masters : DSON().count().test('=6')
+  	})
+
+// here your json
+var json = {
+  "name": "圣杯战争",
+  "about": "Fate",
+  "games": [
+    {
+      "name": "fate stay night",
+      "masters": [
+        {
+          "name": "Shirou Emiya",
+          "cnName": "卫宫士郎"
+        }
+      ],
+      "servants": [
+        {
+          "rank": "saber",
+          "name": "Arutoria Pendoragon",
+          "cnName": "阿尔托莉雅·潘德拉贡",
+          "cv": "川澄绫子",
+          "height": 154,
+          "weight": 42,
+          "BWH": "B73 W53 H76",
+          "remark": "古不列颠传说中的亚瑟王，性格忠诚正直，谦逊有礼，个性认真。"
+        }
+      ]
+    }
+  ]
+}}
+
+(async ()=>{
+    //do select
+    var result = await v.doSelect(json)
+
+    // do test
+    var isSuccess = await v.doTest(json)
+})
+
+```
+
+## 如何扩展dson
 ```js
 
 

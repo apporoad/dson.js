@@ -397,6 +397,19 @@ declare function JVD(experssion: string): JVD
 declare function DSON(experssion): DSON
 
 export = {
+    /**
+     * DSON class
+     */
     DSON: DSON,
-    JVD: JVD
+
+    /**
+     * JVD class
+     */
+    JVD: JVD,
+    
+    /**
+     * 配置dson
+     * @param configs  配置对象
+     */
+    config(configs:Object)
 }

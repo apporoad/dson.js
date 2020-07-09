@@ -35,7 +35,7 @@ function DSON() {
                     console.log('DSON key string cannot be reged : ' + itemName)
                     return
                 default:
-                    this[itemName] = (...args) => {
+                    var itemFunction = (...args) => {
                         _this._queue.push({
                             item: itemName,
                             params: args,
@@ -43,6 +43,7 @@ function DSON() {
                         })
                         return _this
                     }
+                    this[itemName] = itemFunction
                     _this._implements[itemName] = implement
                     break;
             }

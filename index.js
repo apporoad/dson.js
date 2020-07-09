@@ -43,13 +43,7 @@ exports.JVD = (expression) =>{
 
 exports.config = (configs)=>{
     configs = configs || {}
-    // //dson中心服务路径
-    // configs.url = configs.url || '/dson'
-    // //dson外部缓存
-    // configs.cacher = configs.cacher || null
-    // //dson外部client 可以是 axios等等 
-    // configs.client = configs.client || null
-
     //设置dson 配置项
-    G.dsonConfigs = configs
+    G.dsonConfigs = G.dsonConfigs || {}
+    G.dsonConfigs = Object.assign({},G.dsonConfigs , configs)
 }

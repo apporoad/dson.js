@@ -54,7 +54,7 @@ var json = {
       ]
     }
   ]
-}}
+}
 
 (async ()=>{
     //do select
@@ -67,10 +67,60 @@ var json = {
 ```
 
 ## 如何扩展dson
+### to extend one instance of DSON
 ```js
+var DSONJS= require('dson.js')
+var d = D = DSON = dson = DSONJS.DSON
+var di1 = d('name')
+var di2 = d()
 
+var json = {"name": "圣杯战争"}
+//reg new method for dsonInstance 
+di1.reg('hello',  (context, yourParam1,yourParam2) => {
+  // your function can be async  or sync, here is sync
+  //context is inner context object for dson
+  // yourParam1 yourParam2 ... is your params
+
+  //here to set result
+  context.currentData = context.tempData = `${context.tempData},hello ${yourParam1} ${yourParam2}`
+  //more details in document
+})
+
+di1.hello('world' , '!!!!')
+
+//here error
+di2.hello('ni','hao')
+
+di1.doSelect(json).then(d=>{ console.log(d)})
+//圣杯战争,hello world !!!!
 
 ```
+
+### to extend DSON globally
+```js
+var DSONJS= require('dson.js')
+var d = D = DSON = dson = DSONJS.DSON
+
+var json = {"name": "圣杯战争"}
+
+//reg new method for DSON
+d.reg('hi', async (context, yourParam1,yourParam2) => {
+  context.currentData = context.tempData = `${context.tempData},hello ${yourParam1} ${yourParam2}`
+})
+
+var di3 = d('name')
+var di4 = d('name')
+
+di3.hi('ni','hao')
+di4.hi(1,2,3)
+
+di3.doSelect(json).then(d=>{ console.log(d)})
+di4.doSelect(json).then(d=>{ console.log(d)})
+//圣杯战争,hi ni hao
+//圣杯战争,hi 1 2
+```
+examples:
+1. [api.dson.js](https://github.com/apporoad/api.dson.js)  扩展dson，使其支持api调用
 
 ## 常用场景
 1. 对json校验

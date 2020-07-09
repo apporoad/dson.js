@@ -2,17 +2,26 @@ const DSON = require('./dson')
 const impls = require('./implements')
 const JVD = require('jvd.js')
 
-const G = globalThis || global || window || {}
+const G = global || globalThis || window || {}
+G.dsonExts = G.dsonExts || {}
 
 exports.DSON = (selector) => {
     var d=new DSON()
     for (key in impls) {
         d.reg(key, impls[key])
     }
+    //load global ext
+    for(key in G.dsonExts){
+        d.reg(key , G.dsonExts[key])
+    }
     d.selector = selector
     //traslator.translate(j,expression) 
     d.JVD = exports.JVD
     return d
+}
+
+exports.DSON.reg = (key,implement)=>{
+    G.dsonExts[key] = implement
 }
 
 var $ = async (data,options,expressionOrJVD) =>{
@@ -34,12 +43,12 @@ exports.JVD = (expression) =>{
 
 exports.config = (configs)=>{
     configs = configs || {}
-    //dson中心服务路径
-    configs.url = configs.url || '/dson'
-    //dson外部缓存
-    configs.cacher = configs.cacher || null
-    //dson外部client 可以是 axios等等 
-    configs.client = configs.client || null
+    // //dson中心服务路径
+    // configs.url = configs.url || '/dson'
+    // //dson外部缓存
+    // configs.cacher = configs.cacher || null
+    // //dson外部client 可以是 axios等等 
+    // configs.client = configs.client || null
 
     //设置dson 配置项
     G.dsonConfigs = configs

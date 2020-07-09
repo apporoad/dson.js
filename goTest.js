@@ -18,8 +18,10 @@ it2 = (title,fn)=>{
 }
 
 global.debug = global.debug || it2
-require('./test')
+require('./test/test')
 
-require('./utils.test')
+require('./test/utils.test')
 
-require('./bug.test')
+require('./test/bug.test')
+
+require('./test/extend.test')

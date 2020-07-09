@@ -124,3 +124,5 @@ pages/
 temp/
 
 *.md
+
+test/

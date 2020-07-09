@@ -1,4 +1,4 @@
-var lutils = require('./utils')
+var lutils = require('../utils')
 
 
 var it2 = global.debug || it

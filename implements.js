@@ -4,7 +4,7 @@ const ljson = require('lisa.json')
 const sxg = require('./sxg')
 const sxgGet = require('./sxgGet')
 const LJ = require('lustjson.js')
-const G = globalThis || global || window || {}
+//const G = globalThis || global || window || {}
 
 exports.mark = (context, name) => {
     if (name) {
@@ -588,28 +588,28 @@ exports.debug= async (context,fn)=>{
 //todo
 exports.mirror = exports.clone
 
-//穿越实现
-exports.X = exports.x = exports.cross = async(context, meta)=>{
-    //context.currentChainNode
+// //穿越实现
+// exports.X = exports.x = exports.cross = async(context, meta)=>{
+//     //context.currentChainNode
 
-    var dson = null
-    //加载缓存
-    if(G.dsonCache && G.dsonCache.get(meta)){
-        dson = G.dsonCache.get(meta)
-        //如果有缓存，判断缓存是否有效
-        // do it in cache
-    }
-    //加载dsonserver
-    if(G.httpClient){
+//     var dson = null
+//     //加载缓存
+//     if(G.dsonCache && G.dsonCache.get(meta)){
+//         dson = G.dsonCache.get(meta)
+//         //如果有缓存，判断缓存是否有效
+//         // do it in cache
+//     }
+//     //加载dsonserver
+//     if(G.httpClient){
         
-    }
-    //加载本地global
-}
+//     }
+//     //加载本地global
+// }
 
-//本地全局化
-exports.global = async(context , key)=>{
-    if(G.dsonCache){
-        G.dsonCache.set(key,context.this)
-    }
-}
+// //本地全局化
+// exports.global = async(context , key)=>{
+//     if(G.dsonCache){
+//         G.dsonCache.set(key,context.this)
+//     }
+// }
 //globalThis

@@ -122,6 +122,19 @@ di4.doSelect(json).then(d=>{ console.log(d)})
 examples:
 1. [api.dson.js](https://github.com/apporoad/api.dson.js)  扩展dson，使其支持api调用
 
+### to extend method preExe
+```js
+var DSONJS= require('dson.js')
+var d = D = DSON = dson = DSONJS.DSON
+
+D.reg('$test', function(dsonObj, p1){
+    console.log(p1)
+})
+
+d('test2').set('abc' , {hello : 1}).$test('yesyes')
+
+```
+
 ## 常用场景
 1. 对json校验
 2. format json

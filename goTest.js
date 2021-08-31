@@ -25,3 +25,5 @@ require('./test/utils.test')
 require('./test/bug.test')
 
 require('./test/extend.test')
+
+require('./test/preExe.test')

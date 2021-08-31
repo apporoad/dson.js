@@ -391,6 +391,18 @@ declare class DSON {
      */
     shift(name:string) :DSON
 
+    /**
+     * debug using
+     * @param fn 
+     */
+    debug(fn : Function) : DSON
+
+    /**
+     * juest do nothing
+     * @param fn 
+     */
+     doNothing(fn : Function) : DSON
+
 }
 
 declare function JVD(experssion: string): JVD

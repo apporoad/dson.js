@@ -35,16 +35,24 @@ function DSON() {
                     console.log('DSON key string cannot be reged : ' + itemName)
                     return
                 default:
-                    var itemFunction = (...args) => {
-                        _this._queue.push({
-                            item: itemName,
-                            params: args,
-                            type: 'dson'
-                        })
-                        return _this
+                    if(utils.startWith(itemName , '$') && itemName.length >1){
+                        this[itemName]  = (...args)=>{
+                            args.unshift(_this)
+                            implement.apply(_this, args)
+                        } 
+                        _this._implements[itemName] = ()=>{}
+                    }else{
+                        var itemFunction = (...args) => {
+                            _this._queue.push({
+                                item: itemName,
+                                params: args,
+                                type: 'dson'
+                            })
+                            return _this
+                        }
+                        this[itemName] = itemFunction
+                        _this._implements[itemName] = implement
                     }
-                    this[itemName] = itemFunction
-                    _this._implements[itemName] = implement
                     break;
             }
         }

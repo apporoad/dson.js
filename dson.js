@@ -92,7 +92,7 @@ function DSON() {
             context.history = options.context.history || []
             //test 不传递
             //context.test = options.context.test || []
-            context.JVD = options.context.JVD
+            context.JVD = options.context.JVD || context.JVD
         }
         //传递
         if(options)
